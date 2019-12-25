@@ -49,8 +49,6 @@ const sendWebHook = async () => {
       }, {
         type: 'divider'
       }, {
-        type: 'divider'
-      }, {
         type: 'section',
         text: {
           type: 'mrkdwn',
