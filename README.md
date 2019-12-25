@@ -2,6 +2,10 @@ Rescuetime bot
 --
 Send rescuetime daily summary data to channel in slack at every day 1:00 am.
 
+<div>
+<img width=400 src="https://user-images.githubusercontent.com/9318449/71448559-c3a6b100-2780-11ea-9966-d9a13de6469b.png" />
+</div>
+
 ## Environment
 ### Development
 - typescript 3.7
