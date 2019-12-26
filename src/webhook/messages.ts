@@ -7,13 +7,13 @@ const MINIMUM_PRODUCTIVE_TIME = 2
 const STANDARD_DISTRACTING_TIME = 2
 const MINIMUM_DISTRACTING_TIME = 1
 
-const getProductiveImogi = cond<number, string>([
+export const getProductiveImogi = cond<number, string>([
   [lte(STANDARD_PRODUCTIVE_TIME), always(':clap:')],
   [gt(MINIMUM_PRODUCTIVE_TIME), always(':weary:')],
   [T, always('')]
 ])
 
-const getDistractingImogi = cond<number, string>([
+export const getDistractingImogi = cond<number, string>([
   [gt(MINIMUM_DISTRACTING_TIME), always(':clap:')],
   [lte(STANDARD_DISTRACTING_TIME), always(':weary:')],
   [T, always('')]
