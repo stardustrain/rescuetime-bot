@@ -12,7 +12,7 @@ export const getDailyData = async () => {
       compareYesterday: compareWithYesterday(data)
     }
   } catch (e) {
-    console.log(e)
+    console.error(e)
   }
 }
 

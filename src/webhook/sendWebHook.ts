@@ -57,7 +57,7 @@ const sendWebHook = async () => {
       }]
     })
   } catch (e) {
-    console.warn(e)
+    console.error(e)
   }
 }
 
