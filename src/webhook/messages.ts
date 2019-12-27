@@ -1,35 +1,16 @@
-import { gt, lte, cond, always, T } from 'ramda'
-import { parseTime } from '../rescuetime/rescuetimeUtils'
+import { isEmpty } from 'ramda'
+
+import { parseTime } from '../utils/parseUtils'
+import {
+  getChartImogi,
+  getDistractingImogi,
+  getProductiveImogi,
+  format,
+} from './messageUtils'
 import { DailySummary } from '../@types/models'
 
-const STANDARD_PRODUCTIVE_TIME = 4
-const MINIMUM_PRODUCTIVE_TIME = 2
-const STANDARD_DISTRACTING_TIME = 2
-const MINIMUM_DISTRACTING_TIME = 1
-
-export const getProductiveImogi = cond<number, string>([
-  [lte(STANDARD_PRODUCTIVE_TIME), always(':clap:')],
-  [gt(MINIMUM_PRODUCTIVE_TIME), always(':weary:')],
-  [T, always('')]
-])
-
-export const getDistractingImogi = cond<number, string>([
-  [gt(MINIMUM_DISTRACTING_TIME), always(':clap:')],
-  [lte(STANDARD_DISTRACTING_TIME), always(':weary:')],
-  [T, always('')]
-])
-
-const getChartImogi = (compareTime: number) => (
-  compareTime > 0 ? ':chart_with_upwards_trend:' : ':chart_with_downwards_trend:'
-)
-
-const format = (time: { hour: number, mins: number } | string) => {
-  if (typeof time === 'string') { return time }
-  return `${time.hour}시간 ${time.mins}분 `
-}
-
 export const generateCompareMessage = (data?: {[key: string]: any}) => {
-  if (!data) {
+  if (isEmpty(data) || !data) {
     throw new Error('Yesterday compare message generate failed.')
   }
 
