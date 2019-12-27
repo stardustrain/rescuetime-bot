@@ -14,3 +14,8 @@
 .gitignore
 
 node_modules
+src/
+README
+tsconfig.json
+jest.config.js
+!/dist
