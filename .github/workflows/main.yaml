@@ -47,7 +47,7 @@ jobs:
       - name: deploy
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
-          version: ''
+          version: '274.0.1'
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           service_account_email: ${{ secrets.GCP_SA_ACCOUNT }}
       - run: gcloud info
