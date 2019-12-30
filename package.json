@@ -7,7 +7,6 @@
     "test": "jest --config jest.config.js",
     "start": "ts-node src/index.ts",
     "build": "rm -rf ./dist && tsc",
-    "predeploy:daily": "npm run build",
     "deploy:daily": "gcloud functions deploy sendDailyReport"
   },
   "repository": {
