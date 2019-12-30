@@ -56,6 +56,13 @@ const sendWebHook = async () => {
         }
       }]
     })
+    console.info(`Send webhook, data: ${JSON.stringify({
+      currentDate,
+      totalHour,
+      productiveTime,
+      distractingTime,
+      devTime
+    })}`)
   } catch (e) {
     console.error(e)
   }

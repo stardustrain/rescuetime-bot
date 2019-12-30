@@ -5,12 +5,14 @@ describe('rescuetimeUtils.ts', () => {
     test('should return object includes hour and mins.', () => {
       expect(parseTime(-0.17)).toEqual({
         hour: 0,
-        mins: -11,
+        mins: 10,
+        isDecrease: true,
       })
 
       expect(parseTime(1.53)).toEqual({
         hour: 1,
         mins: 31,
+        isDecrease: false,
       })
     })
 
