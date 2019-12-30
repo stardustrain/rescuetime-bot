@@ -50,7 +50,10 @@ jobs:
           version: '274.0.1'
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           service_account_email: ${{ secrets.GCP_SA_ACCOUNT }}
-      - run: gcloud functions deploy sendDailyReport --project rescuetime --source ./dist --service-account ${{ secrets.GCP_SA_ACCOUNT }}
+      - run: |
+        echo "$GCP_AUTH" | base64 --decode > "$HOME"/gcloud.json
+        sh -c "gcloud auth activate-service-account --key-file=$HOME/gcloud.json $*"
+        gcloud functions deploy sendDailyReport --project rescuetime --source ./dist --service-account ${{ secrets.GCP_SA_ACCOUNT }}
       # - name: Install gcloud SDK
       #   run: |
       #     sudo apt-get update && sudo apt-get install google-cloud-sdk
