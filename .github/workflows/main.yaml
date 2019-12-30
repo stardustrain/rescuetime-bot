@@ -49,7 +49,4 @@ jobs:
         with:
           version: '270.0.0'
           service_account_key: ${{ secrets.GCP_SA_KEY }}
-      - run: |
-          gcloud projects list
-          gcloud config set project 'rescuetime'
-          npm run deploy:daily
+      - run: npm run deploy:daily
