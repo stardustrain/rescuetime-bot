@@ -1,3 +1,5 @@
+name: Deploy process
+
 on:
   push:
     branches:
