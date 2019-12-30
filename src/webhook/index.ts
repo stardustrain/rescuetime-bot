@@ -56,7 +56,7 @@ const sendWebHook = async () => {
         }
       }]
     })
-    console.info(`Send webhook, data: ${JSON.stringify({
+    console.info(`Send webhook data: ${JSON.stringify({
       currentDate,
       totalHour,
       productiveTime,
