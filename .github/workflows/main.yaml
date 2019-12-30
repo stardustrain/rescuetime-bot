@@ -44,9 +44,10 @@ jobs:
         with:
           name: dist
           path: ./dist
-      - name: deploy
+      - name: Activate GCP service account
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
           version: '274.0.1'
           service_account_key: ${{ secrets.GCP_SA_KEY }}
-      - run: npm run deploy:daily
+      - name: Deploy
+        run: npm run deploy:daily

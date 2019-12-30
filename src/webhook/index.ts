@@ -14,6 +14,7 @@ const sendWebHook = async () => {
 
   try {
     await webhook.send({
+      text: `Productive time was ${productiveTime} on yesterday!`,
       blocks: [{
         type: 'section',
         text: {
