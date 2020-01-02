@@ -14,6 +14,12 @@ describe('rescuetimeUtils.ts', () => {
         mins: 31,
         isDecrease: false,
       })
+
+      expect(parseTime(0)).toEqual({
+        hour: 0,
+        mins: 0,
+        isDecrease: false,
+      })
     })
 
     test('should throw error when received invalid time.', () => {

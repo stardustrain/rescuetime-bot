@@ -1,5 +1,5 @@
-import sendWebHook from './webhook'
+import { sendDailyWebHook } from './webhook'
 
 export const sendDailyReport = () => {
-  sendWebHook()
+  sendDailyWebHook()
 }
