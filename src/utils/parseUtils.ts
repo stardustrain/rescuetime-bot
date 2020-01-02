@@ -1,7 +1,8 @@
+import { isNil } from 'ramda'
 const floor = Math.floor
 
 export const parseTime = (time?: number) => {
-  if (!time) {
+  if (isNil(time)) {
     throw Error('Wrong time.')
   }
 
