@@ -1,7 +1,7 @@
 import { IncomingWebhook } from '@slack/webhook'
 import dayjs from 'dayjs'
 
-import { getDailyData } from '../rescuetime'
+import { getDailyData, getWeeklyData } from '../rescuetime'
 import { generateTodayMessage } from './messages'
 import { dailyMessageBlock } from './messageBlocks'
 
@@ -32,4 +32,8 @@ export const sendDailyWebHook = async () => {
   } catch (e) {
     console.error(e)
   }
+}
+
+export const sendWeeklyWebHook = async () => {
+  getWeeklyData()
 }
