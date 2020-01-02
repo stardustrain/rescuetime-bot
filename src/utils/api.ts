@@ -9,10 +9,10 @@ const instance = axios.create({
   transformResponse: (data) => camelizeKeys(JSON.parse(data))
 })
 
-const generateUrl = (url: string) => (
+export const generateUrl = (url: string) => (
   `${url}?key=${RESCUE_TIME_API_KEY}`
 )
 
 export const request = async <T>(url: string) => (
-  await instance.get<T>(generateUrl(url))
+  await instance.get<T>(url)
 )

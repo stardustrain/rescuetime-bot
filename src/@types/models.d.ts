@@ -59,3 +59,8 @@ export interface DailySummary {
   shoppingDurationFormatted: string
   utilitiesDurationFormatted: string
 }
+
+export interface WeeklyData {
+  rowHeaders: string[]
+  rows: Array<number | string>[]
+}
