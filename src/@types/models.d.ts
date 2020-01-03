@@ -60,7 +60,17 @@ export interface DailySummary {
   utilitiesDurationFormatted: string
 }
 
-export interface WeeklyData {
-  rowHeaders: string[]
-  rows: Array<number | string>[]
+export interface Overview {
+  rowHeaders: ['Rank', 'Time Spent (seconds)', 'Number of People', 'Category']
+  rows: [[number, number, number, string]]
+}
+
+export interface Activity {
+  rowHeaders: ['Rank', 'Time Spent (seconds)', 'Number of People', 'Activity', 'Category', 'Productivity']
+  rows: [[number, number, number, string, string, number]]
+}
+
+export interface Efficiency {
+  rowHeaders: ['Rank', 'Time Spent (seconds)', 'Number of People', 'Efficiency']
+  rows: [[number, number, number, string]]
 }

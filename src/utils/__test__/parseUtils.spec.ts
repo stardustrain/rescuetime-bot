@@ -1,4 +1,4 @@
-import { parseTime } from '../parseUtils'
+import { parseTime, getQueryString } from '../parseUtils'
 
 describe('rescuetimeUtils.ts', () => {
   describe('parseTime(time?: number) ', () => {
@@ -24,6 +24,21 @@ describe('rescuetimeUtils.ts', () => {
 
     test('should throw error when received invalid time.', () => {
       expect(() => parseTime()).toThrow('Wrong time.')
+    })
+  })
+
+  describe('getQueryString(queryObejct: { [key: string]: string })', () => {
+    test('should return query string from query object.', () => {
+      expect(getQueryString({})).toEqual('')
+      expect(getQueryString({
+        a: 1,
+        b: 2,
+        c: 'test'
+      })).toEqual('a=1&b=2&c=test')
+    })
+
+    test('should throw error when received null or undefined.', () => {
+      expect(() => getQueryString(undefined)).toThrow('Wrong query object.')
     })
   })
 })

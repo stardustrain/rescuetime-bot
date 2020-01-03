@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import { camelizeKeys } from 'humps'
 
 const API_END_POINT = 'https://www.rescuetime.com/anapi'
@@ -14,5 +14,11 @@ export const generateUrl = (url: string) => (
 )
 
 export const request = async <T>(url: string) => (
-  await instance.get<T>(url)
+  instance.get<T>(url)
 )
+
+export const requestAll = async <T1, T2, T3>(urls: string[]) => {
+  const res = await axios.all(urls.map((url) => instance.get<T1 | T2 | T3>(url)));
+
+  return res.map(r => r.data)
+}

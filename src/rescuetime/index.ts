@@ -1,15 +1,10 @@
-import { pipe, toPairs, map, join, zip } from 'ramda'
+import dayjs from 'dayjs'
 
-import { request, generateUrl } from '../utils/api'
+import { request, generateUrl, requestAll } from '../utils/api'
+import { getQueryString } from '../utils/parseUtils'
 import { getDayilDataSummary, compareWithYesterday } from './rescuetimeUtils'
 
-import { DailySummary, WeeklyData } from '../@types/models'
-
-const getQueryString = (queryObejct: { [key: string]: string }) => (pipe(
-  (obj: { [key: string]: string }) => toPairs<string>(obj),
-  (xs) => map((x) => x.join('='), xs),
-  join('&')
-))(queryObejct)
+import { DailySummary, Overview, Activity, Efficiency } from '../@types/models'
 
 export const getDailyData = async () => {
   try {
@@ -25,15 +20,30 @@ export const getDailyData = async () => {
 
 export const getWeeklyData = async () => {
   try {
-    const queryString = getQueryString({
-      format: 'json',
-      rb: '2019-12-27',
-      re: '2019-12-27',
-      rk: 'overview',
-    })
+    const currentDate = dayjs()
+    const from = currentDate.subtract(6, 'day').format('YYYY-MM-DD')
+    const to = currentDate.subtract(1, 'day').format('YYYY-MM-DD')
 
-    const url = `${generateUrl('/data')}&${queryString}`
-    const { data } = await request<WeeklyData>(url)
+    const queryObject = {
+      format: 'json',
+      rb: from,
+      re: to,
+      rk: 'overview',
+    }
+
+    const overviewUrl = `${generateUrl('/data')}&${getQueryString(queryObject)}`
+    const activityUrl = `${generateUrl('/data')}&${getQueryString({
+      ...queryObject,
+      rk: 'activity'
+    })}`
+    const efficiencyUrl = `${generateUrl('/data')}&${getQueryString({
+      ...queryObject,
+      rk: 'efficiency'
+    })}`
+
+    const data = await requestAll<Overview, Activity, Efficiency>([overviewUrl, activityUrl, efficiencyUrl])
+    // const { data } = await request<WeeklyData>(url)
+    // console.log(data)
 
   } catch (e) {
     console.error(e)
