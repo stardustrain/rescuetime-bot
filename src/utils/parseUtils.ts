@@ -1,4 +1,5 @@
-import { isNil } from 'ramda'
+import { isNil, pipe, toPairs, map, join } from 'ramda'
+
 const floor = Math.floor
 
 export const parseTime = (time?: number) => {
@@ -15,4 +16,16 @@ export const parseTime = (time?: number) => {
     mins,
     isDecrease: time < 0
   }
+}
+
+export const getQueryString = (queryObejct: { [key: string]: string | number }) => {
+  if (isNil(queryObejct)) {
+    throw Error('Wrong query object.')
+  }
+
+  return (pipe(
+    (obj: { [key: string]: string | number }) => toPairs<string | number>(obj),
+    (xs) => map((x) => join('=', x), xs),
+    join('&')
+  ))(queryObejct)
 }
