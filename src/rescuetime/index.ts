@@ -34,11 +34,11 @@ export const getWeeklyData = async () => {
     const overviewUrl = `${generateUrl('/data')}&${getQueryString(queryObject)}`
     const activityUrl = `${generateUrl('/data')}&${getQueryString({
       ...queryObject,
-      rk: 'activity'
+      rk: 'activity',
     })}`
     const efficiencyUrl = `${generateUrl('/data')}&${getQueryString({
       ...queryObject,
-      rk: 'efficiency'
+      rk: 'efficiency',
     })}`
 
     const data = await requestAll<Overview, Activity, Efficiency>([overviewUrl, activityUrl, efficiencyUrl])

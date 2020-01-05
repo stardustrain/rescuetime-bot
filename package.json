@@ -5,6 +5,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "test": "jest --config jest.config.js",
+    "test:watch": "jest --config jest.config.js --watch",
     "start": "ts-node src/index.ts",
     "build": "rm -rf ./dist && tsc",
     "deploy:daily": "gcloud functions deploy sendDailyReport --project=rescuetime-263111"
@@ -31,6 +32,8 @@
     "@types/humps": "^1.1.2",
     "@types/jest": "^24.0.24",
     "@types/ramda": "^0.26.38",
+    "@typescript-eslint/eslint-plugin": "^2.14.0",
+    "@typescript-eslint/parser": "^2.14.0",
     "eslint": "^6.8.0",
     "jest": "^24.9.0",
     "ts-jest": "^24.2.0",

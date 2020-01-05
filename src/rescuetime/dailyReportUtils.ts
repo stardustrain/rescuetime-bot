@@ -41,7 +41,7 @@ export const compareWithYesterday = (data: DailySummary[]) => {
       today: floor(today.softwareDevelopmentHours * 60),
       yesterday: floor(yesterday.softwareDevelopmentHours * 60),
       compare: floor((today.softwareDevelopmentHours * 60) - (yesterday.softwareDevelopmentHours * 60)),
-    }
+    },
   }
 }
 
