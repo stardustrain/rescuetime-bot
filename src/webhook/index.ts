@@ -35,5 +35,5 @@ export const sendDailyWebHook = async () => {
 }
 
 export const sendWeeklyWebHook = async () => {
-  getWeeklyData()
+  const weeklyData = getWeeklyData()
 }
