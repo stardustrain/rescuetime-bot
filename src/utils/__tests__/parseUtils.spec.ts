@@ -36,9 +36,5 @@ describe('rescuetimeUtils.ts', () => {
         c: 'test'
       })).toEqual('a=1&b=2&c=test')
     })
-
-    test('should throw error when received null or undefined.', () => {
-      expect(() => getQueryString(undefined)).toThrow('Wrong query object.')
-    })
   })
 })

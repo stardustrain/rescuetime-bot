@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 
 import { request, generateUrl, requestAll } from '../utils/api'
 import { getQueryString } from '../utils/parseUtils'
-import { getDayilDataSummary, compareWithYesterday } from './rescuetimeUtils'
+import { getDayilDataSummary, compareWithYesterday } from './dailyReportUtils'
 
 import { DailySummary, Overview, Activity, Efficiency } from '../@types/models'
 
