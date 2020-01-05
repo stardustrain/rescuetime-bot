@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios'
+import axios from 'axios'
 import { camelizeKeys } from 'humps'
 
 const API_END_POINT = 'https://www.rescuetime.com/anapi'
