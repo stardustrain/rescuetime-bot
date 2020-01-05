@@ -6,7 +6,7 @@ const RESCUE_TIME_API_KEY = process.env.RESCUE_TIME_API_KEY
 
 const instance = axios.create({
   baseURL: API_END_POINT,
-  transformResponse: (data) => camelizeKeys(JSON.parse(data))
+  transformResponse: (data) => camelizeKeys(JSON.parse(data)),
 })
 
 export const generateUrl = (url: string) => (
