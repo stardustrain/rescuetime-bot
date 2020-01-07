@@ -12,7 +12,7 @@ export const getDailyData = async () => {
     const { data } = await request<DailySummary[]>(generateUrl('/daily_summary_feed'))
     return {
       summary: getDayilDataSummary(data),
-      compareYesterday: compareWithYesterday(data)
+      compareYesterday: compareWithYesterday(data),
     }
   } catch (e) {
     console.error(e)

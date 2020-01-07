@@ -27,7 +27,7 @@ export const sendDailyWebHook = async () => {
       totalHour,
       productiveTime,
       distractingTime,
-      devTime
+      devTime,
     })}`)
   } catch (e) {
     console.error(e)

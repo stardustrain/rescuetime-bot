@@ -19,40 +19,40 @@ export const dailyMessageBlock = ({
     text: {
       type: 'mrkdwn',
       text: `:calendar: *${currentDate}* Rescuetime daily report`
-    }
+    },
   }, {
-    type: 'divider'
-  }, {
-    type: 'section',
-    text: {
-      type: 'mrkdwn',
-      text: totalHour
-    }
+    type: 'divider',
   }, {
     type: 'section',
     text: {
       type: 'mrkdwn',
-      text: productiveTime
-    }
+      text: totalHour,
+    },
   }, {
     type: 'section',
     text: {
       type: 'mrkdwn',
-      text: distractingTime
-    }
+      text: productiveTime,
+    },
   }, {
     type: 'section',
     text: {
       type: 'mrkdwn',
-      text: devTime
-    }
+      text: distractingTime,
+    },
   }, {
-    type: 'divider'
+    type: 'section',
+    text: {
+      type: 'mrkdwn',
+      text: devTime,
+    },
+  }, {
+    type: 'divider',
   }, {
     type: 'section',
     text: {
       type: 'mrkdwn',
       text: `Rescuetime :point_right: <https://www.rescuetime.com/dashboard/for/the/day/of/${currentDate}|Dashboard>`
-    }
-  }]
+    },
+  }],
 })
