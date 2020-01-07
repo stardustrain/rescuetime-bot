@@ -17,8 +17,8 @@ export const request = async <T>(url: string) => (
   instance.get<T>(url)
 )
 
-export const requestAll = async <T1, T2, T3>(urls: string[]) => {
-  const res = await axios.all(urls.map((url) => instance.get<T1 | T2 | T3>(url)));
+export const requestAll = async (urls: string[]) => {
+  const res = await axios.all(urls.map((url) => instance.get(url)))
 
   return res.map(r => r.data)
 }

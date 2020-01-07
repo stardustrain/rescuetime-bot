@@ -3,8 +3,9 @@ import dayjs from 'dayjs'
 import { request, generateUrl, requestAll } from '../utils/api'
 import { getQueryString } from '../utils/parseUtils'
 import { getDayilDataSummary, compareWithYesterday } from './dailyReportUtils'
+import { parseOverview, parseActivity, parseEffieciency } from './weeklyReportUtils'
 
-import { DailySummary, Overview, Activity, Efficiency } from '../@types/models'
+import { DailySummary } from '../@types/models'
 
 export const getDailyData = async () => {
   try {
@@ -41,10 +42,17 @@ export const getWeeklyData = async () => {
       rk: 'efficiency',
     })}`
 
-    const data = await requestAll<Overview, Activity, Efficiency>([overviewUrl, activityUrl, efficiencyUrl])
-    // const { data } = await request<WeeklyData>(url)
-    // console.log(data)
+    const [
+      overview,
+      activity,
+      efficiency,
+    ] = await requestAll([overviewUrl, activityUrl, efficiencyUrl])
 
+    return {
+      overview: parseOverview(overview),
+      activity: parseActivity(activity),
+      efficiency: parseEffieciency(efficiency),
+    }
   } catch (e) {
     console.error(e)
   }
