@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout master
         uses: actions/checkout@master
+        with:
+          ref: dev
       - name: Install dependencies
         run: npm install
       - name: Run test
