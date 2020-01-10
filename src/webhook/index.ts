@@ -35,6 +35,9 @@ export const sendDailyWebHook = async () => {
 }
 
 export const sendWeeklyWebHook = async () => {
+  // const weeklyData = await getWeeklyData()
+  // console.log(weeklyData)
   const weeklyData = await getWeeklyData()
+  // const weeklyOverview = generateWeeklyOverviewData(weeklyData?.overview)
   console.log(weeklyData)
 }

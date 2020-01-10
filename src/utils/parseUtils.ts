@@ -14,7 +14,7 @@ export const parseTime = (time?: number) => {
   return {
     hour,
     mins,
-    isDecrease: time < 0
+    isDecrease: time < 0,
   }
 }
 
@@ -26,6 +26,6 @@ export const getQueryString = (queryObejct: { [key: string]: string | number }) 
   return (pipe(
     (obj: { [key: string]: string | number }) => toPairs<string | number>(obj),
     (xs) => map((x) => join('=', x), xs),
-    join('&')
+    join('&'),
   ))(queryObejct)
 }

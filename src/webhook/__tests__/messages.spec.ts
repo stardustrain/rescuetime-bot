@@ -14,7 +14,7 @@ describe('messages.ts', () => {
         },
         softwareDevelopmentMins: {
           compare: 130,
-        }
+        },
       })).toEqual({
         compareProductiveImogi: ':chart_with_upwards_trend:',
         compareProductiveTime: '2시간 38분',
@@ -33,7 +33,7 @@ describe('messages.ts', () => {
         },
         softwareDevelopmentMins: {
           compare: 130,
-        }
+        },
       })).toEqual({
         compareProductiveImogi: ':chart_with_upwards_trend:',
         compareProductiveTime: '20분',

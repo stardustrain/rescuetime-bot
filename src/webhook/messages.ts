@@ -1,4 +1,4 @@
-import { isEmpty } from 'ramda'
+import { isEmpty, isNil } from 'ramda'
 
 import { parseTime } from '../utils/parseUtils'
 import {
@@ -7,10 +7,11 @@ import {
   getProductiveImogi,
   format,
 } from './messageUtils'
+
 import { DailySummary } from '../@types/models'
 
 export const generateCompareMessage = (data?: {[key: string]: any}) => {
-  if (isEmpty(data) || !data) {
+  if (isEmpty(data) || isNil(data)) {
     throw new Error('Yesterday compare message generate failed.')
   }
 
@@ -51,6 +52,6 @@ export const generateTodayMessage = (summaryData?: Partial<DailySummary>, compar
     totalHour: `:alarm_clock: 전체 시간 *${format(parseTime(summaryData.totalHours))}* :heartbeat: Pulse ${summaryData.productivityPulse}\n\n`,
     productiveTime: `:runner: 생산성 ${produtiveEmogi}\n>:alarm_clock: *${format(productiveTime)}* | ${summaryData.allProductivePercentage}% | ${compareProductiveImogi} ${compareProductiveTime}\n\n`,
     distractingTime: `:zany_face: 산만함 ${distractingEmogi}\n>:alarm_clock: *${format(distractingTime)}* | ${summaryData.allDistractingPercentage}% | ${compareDistractingImogi} ${compareDistractingTime}\n\n`,
-    devTime: `:computer: 프로그램 개발 ${produtiveEmogi}\n>:alarm_clock: *${format(programTime)}* | ${summaryData.softwareDevelopmentPercentage}% | ${compareSoftwareDevelopmentImogi} ${compareSoftwareTime}`
+    devTime: `:computer: 프로그램 개발 ${produtiveEmogi}\n>:alarm_clock: *${format(programTime)}* | ${summaryData.softwareDevelopmentPercentage}% | ${compareSoftwareDevelopmentImogi} ${compareSoftwareTime}`,
   }
 }
