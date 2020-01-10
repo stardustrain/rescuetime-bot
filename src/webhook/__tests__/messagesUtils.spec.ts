@@ -1,6 +1,11 @@
 import {
   getProductiveImogi,
   getDistractingImogi,
+  generateWeeklyOverviewData,
+  generateWeeklyActivityData,
+  getScaledActivityScore,
+  getAvgTimeSpent,
+  getTotalTimeSpent,
 } from '../messageUtils'
 
 describe('messageUtils.ts', () => {
@@ -38,6 +43,133 @@ describe('messageUtils.ts', () => {
       expect(getDistractingImogi(1)).toEqual('')
       expect(getDistractingImogi(2)).toEqual(':weary:')
       expect(getDistractingImogi(3)).toEqual(':weary:')
+    })
+  })
+
+  describe('getTotalTimeSpent(time: number)', () => {
+    test('should return formatted total spented time that 6 days.', () => {
+      expect(getTotalTimeSpent(46687)).toEqual('12시간 58분')
+      expect(getTotalTimeSpent(14531)).toEqual('4시간 2분')
+      expect(getTotalTimeSpent(3953)).toEqual('1시간 5분')
+    })
+  })
+
+  describe('getAvgTimeSpent(time: number)', () => {
+    test('should return formatted spented time that average on 6 days.', () => {
+      expect(getAvgTimeSpent(46687)).toEqual('2시간 9분')
+      expect(getAvgTimeSpent(14531)).toEqual('40분')
+      expect(getAvgTimeSpent(3953)).toEqual('10분')
+    })
+  })
+
+  describe('generateWeeklyOverviewData(overviews?: ParsedOverview)', () => {
+    test('should return generated data when recieved valid data.', () => {
+      expect(generateWeeklyOverviewData([
+        { rank: 1, timeSpent: 46687, category: 'Software Development' },
+        { rank: 2, timeSpent: 14531, category: 'Communication & Scheduling' },
+        { rank: 3, timeSpent: 3953, category: 'Business' },
+        { rank: 4, timeSpent: 3331, category: 'Reference & Learning' },
+        { rank: 5, timeSpent: 2940, category: 'Utilities' } ]),
+      ).toEqual([
+        { rank: 1, totalTimeSpent: '12시간 58분', avgTimeSpent: '2시간 9분', category: 'Software Development' },
+        { rank: 2, totalTimeSpent: '4시간 2분', avgTimeSpent: '40분', category: 'Communication & Scheduling' },
+        { rank: 3, totalTimeSpent: '1시간 5분', avgTimeSpent: '10분', category: 'Business' },
+        { rank: 4, totalTimeSpent: '55분', avgTimeSpent: '9분', category: 'Reference & Learning' },
+        { rank: 5, totalTimeSpent: '49분', avgTimeSpent: '8분', category: 'Utilities' },
+      ])
+    })
+
+    test('should rasing error when received invalid data.', () => {
+      const empty: any = {}
+      expect(() => generateWeeklyOverviewData()).toThrow('Overview generate failed.')
+      expect(() => generateWeeklyOverviewData(empty)).toThrow('Overview generate failed.')
+    })
+  })
+
+  describe('getScaledActivityScore(activityScores: ParsedActivity)', () => {
+    test('should return scaled score.', () => {
+      expect(getScaledActivityScore([{
+        rank: 1,
+        timeSpent: 28930,
+        activity: 'Visual Studio Code',
+        category: 'Editing & IDEs',
+        weightedProductivty: 2,
+      }, {
+        rank: 2,
+        timeSpent: 10946,
+        activity: 'Slack',
+        category: 'Instant Message',
+        weightedProductivty: -1,
+      }, {
+        rank: 3,
+        timeSpent: 5580,
+        activity: 'github.com',
+        category: 'General Software Development',
+        weightedProductivty: 2,
+      }, {
+        rank: 4,
+        timeSpent: 3541,
+        activity: 'Terminal',
+        category: 'Systems Operations',
+        weightedProductivty: 2,
+      }, {
+        rank: 5,
+        timeSpent: 2987,
+        activity: 'localhost:3000',
+        category: 'General Software Development',
+        weightedProductivty: 2,
+      }])).toEqual(41)
+    })
+  })
+
+  describe('generateWeeklyActivityData(activities?: ParsedActivity)', () => {
+    test('should return generated data when recieved valid data.', () => {
+      expect(generateWeeklyActivityData([{
+        rank: 1,
+        timeSpent: 28930,
+        activity: 'Visual Studio Code',
+        category: 'Editing & IDEs',
+        weightedProductivty: 2,
+      }, {
+        rank: 2,
+        timeSpent: 10946,
+        activity: 'Slack',
+        category: 'Instant Message',
+        weightedProductivty: -1,
+      }, {
+        rank: 3,
+        timeSpent: 5580,
+        activity: 'github.com',
+        category: 'General Software Development',
+        weightedProductivty: 2,
+      }, {
+        rank: 4,
+        timeSpent: 3541,
+        activity: 'Terminal',
+        category: 'Systems Operations',
+        weightedProductivty: 2,
+      }, {
+        rank: 5,
+        timeSpent: 2987,
+        activity: 'localhost:3000',
+        category: 'General Software Development',
+        weightedProductivty: 2,
+      }])).toEqual({
+        score: 41,
+        rows: [
+          { rank: 1, totalTimeSpent: '8시간 2분', avgTimeSpent: '1시간 20분', activity: 'Visual Studio Code' },
+          { rank: 2, totalTimeSpent: '3시간 2분', avgTimeSpent: '30분', activity: 'Slack' },
+          { rank: 3, totalTimeSpent: '1시간 33분', avgTimeSpent: '15분', activity: 'github.com' },
+          { rank: 4, totalTimeSpent: '59분', avgTimeSpent: '9분', activity: 'Terminal' },
+          { rank: 5, totalTimeSpent: '49분', avgTimeSpent: '8분', activity: 'localhost:3000' },
+        ],
+      })
+    })
+
+    test('should rasing error when received invalid data.', () => {
+      const empty: any = {}
+      expect(() => generateWeeklyActivityData()).toThrow('Activity generate failed.')
+      expect(() => generateWeeklyActivityData(empty)).toThrow('Activity generate failed.')
     })
   })
 })

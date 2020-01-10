@@ -1,4 +1,4 @@
-import { parseOverview, parseActivity, parseEffieciency } from '../weeklyReportUtils'
+import { parseOverview, parseActivity, parseefficiency } from '../weeklyReportUtils'
 
 const emptyData: any = {
   rowHeaders: [],
@@ -113,7 +113,7 @@ describe('weeklyReportUtils.ts', () => {
     })
   }),
 
-  describe('parseEffieciency', () => {
+  describe('parseefficiency(efficiency: Efficiency)', () => {
     test('should return first 5 array of object which pairs row header and row.', () => {
       const efficiency: any = {
         rowHeaders: [
@@ -130,7 +130,7 @@ describe('weeklyReportUtils.ts', () => {
           [5, 2653, 1, 'Very Distracting Time'],
         ],
       }
-      expect(parseEffieciency(efficiency)).toEqual([{
+      expect(parseefficiency(efficiency)).toEqual([{
         rank: 1,
         timeSpent: 48287,
         efficiency: 'Very Productive Time',
@@ -154,7 +154,7 @@ describe('weeklyReportUtils.ts', () => {
     })
 
     test('should return empty array when received empty efficiency.', () => {
-      expect(parseEffieciency(emptyData)).toEqual([])
+      expect(parseefficiency(emptyData)).toEqual([])
     })
   })
 })

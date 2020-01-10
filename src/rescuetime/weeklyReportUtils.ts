@@ -2,6 +2,10 @@ import { take, map } from 'ramda'
 
 import { Overview, Activity, Efficiency } from '../@types/models'
 
+export type ParsedOverview = ReturnType<typeof parseOverview>[0]
+export type ParsedActivity = ReturnType<typeof parseActivity>[0]
+export type Parsedefficiency = ReturnType<typeof parseefficiency>[0]
+
 export const parseOverview = (overview: Overview) =>
   map((row) => ({
     rank: row[0],
@@ -18,7 +22,7 @@ export const parseActivity = (activity: Activity) =>
     weightedProductivty: row[5],
   }), take(5, activity.rows))
 
-export const parseEffieciency = (efficiency: Efficiency) =>
+export const parseefficiency = (efficiency: Efficiency) =>
   map((row) => ({
     rank: row[0],
     timeSpent: row[1],
