@@ -3,6 +3,7 @@ import {
   getDistractingImogi,
   generateWeeklyOverviewData,
   generateWeeklyActivityData,
+  generateWeeklyefficiencyData,
   getScaledActivityScore,
   getAvgTimeSpent,
   getTotalTimeSpent,
@@ -86,7 +87,7 @@ describe('messageUtils.ts', () => {
     })
   })
 
-  describe('getScaledActivityScore(activityScores: ParsedActivity)', () => {
+  describe('getScaledActivityScore(activityScores: ParsedActivity[])', () => {
     test('should return scaled score.', () => {
       expect(getScaledActivityScore([{
         rank: 1,
@@ -119,10 +120,18 @@ describe('messageUtils.ts', () => {
         category: 'General Software Development',
         weightedProductivty: 2,
       }])).toEqual(41)
+
+      expect(getScaledActivityScore([{
+        rank: 1,
+        timeSpent: 4 * 6 * 3600,
+        activity: 'Visual Studio Code',
+        category: 'Editing & IDEs',
+        weightedProductivty: 2,
+      }])).toEqual(100)
     })
   })
 
-  describe('generateWeeklyActivityData(activities?: ParsedActivity)', () => {
+  describe('generateWeeklyActivityData(activities?: ParsedActivity[])', () => {
     test('should return generated data when recieved valid data.', () => {
       expect(generateWeeklyActivityData([{
         rank: 1,
@@ -170,6 +179,30 @@ describe('messageUtils.ts', () => {
       const empty: any = {}
       expect(() => generateWeeklyActivityData()).toThrow('Activity generate failed.')
       expect(() => generateWeeklyActivityData(empty)).toThrow('Activity generate failed.')
+    })
+  })
+
+  describe('generateWeeklyefficiencyData(efficiencies?: Parsedefficiency[])', () => {
+    test('should return generated data when received valid data.', () => {
+      expect(generateWeeklyefficiencyData([
+        { rank: 1, timeSpent: 53080, efficiency: 'Very Productive Time' },
+        { rank: 2, timeSpent: 10990, efficiency: 'Distracting Time' },
+        { rank: 3, timeSpent: 10106, efficiency: 'Neutral Time' },
+        { rank: 4, timeSpent: 1967, efficiency: 'Productive Time' },
+        { rank: 5, timeSpent: 1283, efficiency: 'Very Distracting Time' },
+      ])).toEqual([
+        { rank: 1, timeSpent: 53080, totalTimeSpent: '14시간 44분', avgTimeSpent: '2시간 27분', efficiency: 'Very Productive Time' },
+        { rank: 2, timeSpent: 10990, totalTimeSpent: '3시간 3분', avgTimeSpent: '30분', efficiency: 'Distracting Time' },
+        { rank: 3, timeSpent: 10106, totalTimeSpent: '2시간 48분', avgTimeSpent: '28분', efficiency: 'Neutral Time' },
+        { rank: 4, timeSpent: 1967, totalTimeSpent: '32분', avgTimeSpent: '5분', efficiency: 'Productive Time' },
+        { rank: 5, timeSpent: 1283, totalTimeSpent: '21분', avgTimeSpent: '3분', efficiency: 'Very Distracting Time' },
+      ])
+    })
+
+    test('should rasing error when received invalid data.', () => {
+      const empty: any = {}
+      expect(() => generateWeeklyefficiencyData()).toThrow('Efficiency generate failed.')
+      expect(() => generateWeeklyefficiencyData(empty)).toThrow('Efficiency generate failed.')
     })
   })
 })

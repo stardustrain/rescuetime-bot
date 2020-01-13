@@ -1,10 +1,22 @@
 import { take, map } from 'ramda'
+import dayjs from 'dayjs'
 
 import { Overview, Activity, Efficiency } from '../@types/models'
 
 export type ParsedOverview = ReturnType<typeof parseOverview>[0]
 export type ParsedActivity = ReturnType<typeof parseActivity>[0]
 export type Parsedefficiency = ReturnType<typeof parseefficiency>[0]
+
+export const getWeekRange = () => {
+  const currentDate = dayjs()
+  const from = currentDate.subtract(6, 'day').format('YYYY-MM-DD')
+  const to = currentDate.subtract(1, 'day').format('YYYY-MM-DD')
+
+  return {
+    from,
+    to,
+  }
+}
 
 export const parseOverview = (overview: Overview) =>
   map((row) => ({

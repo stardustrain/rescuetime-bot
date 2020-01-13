@@ -1,9 +1,10 @@
 import { IncomingWebhook } from '@slack/webhook'
 import dayjs from 'dayjs'
 
+import { getWeekRange } from '../rescuetime/weeklyReportUtils'
 import { getDailyData, getWeeklyData } from '../rescuetime'
-import { generateTodayMessage } from './messages'
-import { dailyMessageBlock } from './messageBlocks'
+import { generateTodayMessage, generateWeeklyMessage } from './messages'
+import { dailyMessageBlock, weeklyMessageBlock } from './messageBlocks'
 
 const HOOK_URL = process.env.HOOK_URL || ''
 
@@ -22,7 +23,7 @@ export const sendDailyWebHook = async () => {
       devTime,
       currentDate,
     }))
-    console.info(`Send webhook data: ${JSON.stringify({
+    console.info(`Send daily webhook data: ${JSON.stringify({
       currentDate,
       totalHour,
       productiveTime,
@@ -35,9 +36,26 @@ export const sendDailyWebHook = async () => {
 }
 
 export const sendWeeklyWebHook = async () => {
-  // const weeklyData = await getWeeklyData()
-  // console.log(weeklyData)
   const weeklyData = await getWeeklyData()
-  // const weeklyOverview = generateWeeklyOverviewData(weeklyData?.overview)
-  console.log(weeklyData)
+  const { totalHour, efficiencyRank, overviewRank } = generateWeeklyMessage(weeklyData)
+  const { from, to } = getWeekRange()
+
+  try {
+    await webhook.send(weeklyMessageBlock({
+      from: weeklyData?.from ?? from,
+      to: weeklyData?.to ?? to,
+      totalHour,
+      efficiencyRank,
+      overviewRank,
+    }))
+    console.info(`Send weekly webhook data: ${JSON.stringify({
+      from: weeklyData?.from,
+      to: weeklyData?.to,
+      totalHour,
+      efficiencyRank,
+      overviewRank,
+    })}`)
+  } catch (e) {
+    console.error(e)
+  }
 }

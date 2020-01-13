@@ -33,7 +33,7 @@ describe('rescuetimeUtils.ts', () => {
       expect(getQueryString({
         a: 1,
         b: 2,
-        c: 'test'
+        c: 'test',
       })).toEqual('a=1&b=2&c=test')
     })
   })

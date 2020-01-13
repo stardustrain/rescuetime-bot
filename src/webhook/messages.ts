@@ -1,4 +1,4 @@
-import { isEmpty, isNil } from 'ramda'
+import { isEmpty, isNil, sum, pipe, map } from 'ramda'
 
 import { parseTime } from '../utils/parseUtils'
 import {
@@ -6,9 +6,12 @@ import {
   getDistractingImogi,
   getProductiveImogi,
   format,
+  generateWeeklyActivityData,
+  generateWeeklyOverviewData,
+  generateWeeklyefficiencyData,
 } from './messageUtils'
 
-import { DailySummary } from '../@types/models'
+import { DailySummary, WeeklyData } from '../@types/models'
 
 export const generateCompareMessage = (data?: {[key: string]: any}) => {
   if (isEmpty(data) || isNil(data)) {
@@ -28,7 +31,7 @@ export const generateCompareMessage = (data?: {[key: string]: any}) => {
 }
 
 export const generateTodayMessage = (summaryData?: Partial<DailySummary>, compareData?: {[key: string]: any}) => {
-  if (!summaryData) {
+  if (isEmpty(summaryData) || isNil(summaryData)) {
     throw new Error('Summary generate failed.')
   }
 
@@ -53,5 +56,28 @@ export const generateTodayMessage = (summaryData?: Partial<DailySummary>, compar
     productiveTime: `:runner: 생산성 ${produtiveEmogi}\n>:alarm_clock: *${format(productiveTime)}* | ${summaryData.allProductivePercentage}% | ${compareProductiveImogi} ${compareProductiveTime}\n\n`,
     distractingTime: `:zany_face: 산만함 ${distractingEmogi}\n>:alarm_clock: *${format(distractingTime)}* | ${summaryData.allDistractingPercentage}% | ${compareDistractingImogi} ${compareDistractingTime}\n\n`,
     devTime: `:computer: 프로그램 개발 ${produtiveEmogi}\n>:alarm_clock: *${format(programTime)}* | ${summaryData.softwareDevelopmentPercentage}% | ${compareSoftwareDevelopmentImogi} ${compareSoftwareTime}`,
+  }
+}
+
+export const generateWeeklyMessage = (weeklyData?: WeeklyData) => {
+  if (isEmpty(weeklyData) || isNil(weeklyData)) {
+    throw new Error('WeeklyData generate failed.')
+  }
+
+  const { score } = generateWeeklyActivityData(weeklyData.activity)
+  const efficiencies = generateWeeklyefficiencyData(weeklyData.efficiency)
+  const overviews = generateWeeklyOverviewData(weeklyData.overview)
+
+  const totalTime = (pipe(
+    map((x: any) => x.timeSpent / (60 * 60)),
+    sum,
+    parseTime,
+    format,
+  ))(efficiencies)
+
+  return {
+    totalHour: `:alarm_clock: 전체 시간 *${totalTime}* :100: Score: ${score}\n\n`,
+    efficiencyRank: `:chart: 어떻게 시간을 썼나요?\n${efficiencies.map((efficiency) => `${efficiency.rank}. ${efficiency.efficiency} ${efficiency.totalTimeSpent}, 평균 ${efficiency.avgTimeSpent}\n`).join('')}`,
+    overviewRank: `어디에 시간을 썼나요?\n${overviews.map((overview) => `${overview.rank}. ${overview.totalTimeSpent}, 평균 ${overview.avgTimeSpent}을 ${overview.category}에 사용하였습니다.\n`).join('')}`,
   }
 }
