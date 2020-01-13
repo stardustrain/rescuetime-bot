@@ -89,7 +89,17 @@ export const generateWeeklyActivityData = (activities?: ParsedActivity[]) => {
   }
 }
 
-export const generateWeeklyefficiencyData = (efficiencies: Parsedefficiency[]) => {
-  // TODO: Implement this function.
+export const generateWeeklyefficiencyData = (efficiencies?: Parsedefficiency[]) => {
+  if (isNil(efficiencies) || isEmpty(efficiencies)) {
+    throw Error('Efficiency generate failed.')
+  }
+
+  return efficiencies.map(({ rank, timeSpent, efficiency }) => ({
+    rank,
+    timeSpent,
+    totalTimeSpent: getTotalTimeSpent(timeSpent),
+    avgTimeSpent: getAvgTimeSpent(timeSpent),
+    efficiency,
+  }))
   // { rank, totalTimeSpent, avgTimeSpent, efficiency}
 }

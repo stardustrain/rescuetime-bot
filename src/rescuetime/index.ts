@@ -1,9 +1,7 @@
-import dayjs from 'dayjs'
-
 import { request, generateUrl, requestAll } from '../utils/api'
 import { getQueryString } from '../utils/parseUtils'
 import { getDayilDataSummary, compareWithYesterday } from './dailyReportUtils'
-import { parseOverview, parseActivity, parseefficiency } from './weeklyReportUtils'
+import { parseOverview, parseActivity, parseefficiency, getWeekRange } from './weeklyReportUtils'
 
 import { DailySummary } from '../@types/models'
 
@@ -21,9 +19,7 @@ export const getDailyData = async () => {
 
 export const getWeeklyData = async () => {
   try {
-    const currentDate = dayjs()
-    const from = currentDate.subtract(6, 'day').format('YYYY-MM-DD')
-    const to = currentDate.subtract(1, 'day').format('YYYY-MM-DD')
+    const { from, to } = getWeekRange()
 
     const queryObject = {
       format: 'json',
