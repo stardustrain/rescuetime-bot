@@ -29,5 +29,5 @@ Send rescuetime daily summary data to channel in slack at every day 1:00 am.
 ## Deployment
 1. Install [gcloud sdk](https://cloud.google.com/sdk/docs/downloads-interactive?hl=ko).
 2. Run ```gcloud init``` command, and select(or create) project.
-3. First time, run ```npm run build``` and executing ```gcloud functions deploy sendDailyReport --update-env-vars RESCUE_TIME_API_KEY=YOUR_KEY,HOOK_URL=YOUR_URL```, cause set to env variable in GCP functions.
+3. First time, run ```npm run build``` and executing ```gcloud functions deploy sendDailyReport --runtime RUNTIME --trigger-topic TOPIC_NAME --update-env-vars RESCUE_TIME_API_KEY=YOUR_KEY,HOOK_URL=YOUR_URL```, cause set to env variable in GCP functions.
 4. If success to deploy, use ```npm run deploy``` command on next deployment.
