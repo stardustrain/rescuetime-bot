@@ -22,6 +22,7 @@ module.exports = {
     "rules": {
         '@typescript-eslint/no-unused-vars': ['error', { args: 'none' }],
         'comma-dangle': ['warn', 'always-multiline'],
-        'quotes': ['warn', 'single']
+        'quotes': ['warn', 'single'],
+        'semi': ['error', 'never'],
     }
 };

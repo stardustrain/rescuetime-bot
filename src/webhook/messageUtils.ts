@@ -1,4 +1,5 @@
-import { gt, lte, cond, always, T, values, all, equals, pick, reduce, isNil, isEmpty } from 'ramda'
+import { gt, lte, cond, always, T, values, all, equals, pick, reduce, isNil, isEmpty, indexBy, prop } from 'ramda'
+import { camelizeKeys } from 'humps'
 
 import { scaleLinear } from 'd3-scale'
 
@@ -12,6 +13,10 @@ const STANDARD_PRODUCTIVE_TIME = 4
 const MINIMUM_PRODUCTIVE_TIME = 2
 const STANDARD_DISTRACTING_TIME = 2
 const MINIMUM_DISTRACTING_TIME = 1
+const BEST_SCORE = 80
+const WORST_SCORE = 50
+
+export type WeeklyefficiencyData = ReturnType<typeof generateWeeklyefficiencyData>
 
 export const getProductiveImogi = cond<number, string>([
   [lte(STANDARD_PRODUCTIVE_TIME), always(':clap:')],
@@ -22,6 +27,12 @@ export const getProductiveImogi = cond<number, string>([
 export const getDistractingImogi = cond<number, string>([
   [gt(MINIMUM_DISTRACTING_TIME), always(':clap:')],
   [lte(STANDARD_DISTRACTING_TIME), always(':weary:')],
+  [T, always('')],
+])
+
+export const getScoreImogi = cond<number, string>([
+  [gt(WORST_SCORE), always(':skull:')],
+  [lte(BEST_SCORE), always(':goodjob:')],
   [T, always('')],
 ])
 
@@ -94,12 +105,30 @@ export const generateWeeklyefficiencyData = (efficiencies?: Parsedefficiency[]) 
     throw Error('Efficiency generate failed.')
   }
 
-  return efficiencies.map(({ rank, timeSpent, efficiency }) => ({
-    rank,
-    timeSpent,
-    totalTimeSpent: getTotalTimeSpent(timeSpent),
-    avgTimeSpent: getAvgTimeSpent(timeSpent),
-    efficiency,
-  }))
-  // { rank, totalTimeSpent, avgTimeSpent, efficiency}
+  const ce = camelizeKeys(indexBy(prop('efficiency'), efficiencies)) as {[key: string]: Parsedefficiency}
+
+  return [{
+    timeSpent: ce.productiveTime.timeSpent + ce.veryProductiveTime.timeSpent,
+    totalTimeSpent: getTotalTimeSpent(ce.productiveTime.timeSpent + ce.veryProductiveTime.timeSpent),
+    avgTimeSpent: getAvgTimeSpent(ce.productiveTime.timeSpent + ce.veryProductiveTime.timeSpent),
+    efficiency: 'Productive Time',
+  }, {
+    timeSpent: ce.distractingTime.timeSpent + ce.veryDistractingTime.timeSpent,
+    totalTimeSpent: getTotalTimeSpent(ce.distractingTime.timeSpent + ce.veryDistractingTime.timeSpent),
+    avgTimeSpent: getAvgTimeSpent(ce.distractingTime.timeSpent + ce.veryDistractingTime.timeSpent),
+    efficiency: 'Distracting Time',
+  }, {
+    timeSpent: ce.neutralTime.timeSpent,
+    totalTimeSpent: getTotalTimeSpent(ce.neutralTime.timeSpent),
+    avgTimeSpent: getAvgTimeSpent(ce.neutralTime.timeSpent),
+    efficiency: 'Neutral Time',
+  }]
+}
+
+export const generateEfficiencyMessageBlock = (efficiencies?: ReturnType<typeof generateWeeklyefficiencyData>) => {
+  if (isNil(efficiencies) || isEmpty(efficiencies)) {
+    throw Error('Efficiency message block generate failed.')
+  }
+
+
 }

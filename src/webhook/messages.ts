@@ -1,4 +1,4 @@
-import { isEmpty, isNil, sum, pipe, map } from 'ramda'
+import { isEmpty, isNil, pipe, reduce } from 'ramda'
 
 import { parseTime } from '../utils/parseUtils'
 import {
@@ -9,6 +9,8 @@ import {
   generateWeeklyActivityData,
   generateWeeklyOverviewData,
   generateWeeklyefficiencyData,
+  getScoreImogi,
+  WeeklyefficiencyData,
 } from './messageUtils'
 
 import { DailySummary, WeeklyData } from '../@types/models'
@@ -68,16 +70,15 @@ export const generateWeeklyMessage = (weeklyData?: WeeklyData) => {
   const efficiencies = generateWeeklyefficiencyData(weeklyData.efficiency)
   const overviews = generateWeeklyOverviewData(weeklyData.overview)
 
-  const totalTime = (pipe(
-    map((x: any) => x.timeSpent / (60 * 60)),
-    sum,
+  const totalTime = pipe(
+    reduce<WeeklyefficiencyData[0], number>((acc, v) => acc + (v.timeSpent / (60 * 60)), 0),
     parseTime,
     format,
-  ))(efficiencies)
+  )(efficiencies)
 
   return {
-    totalHour: `:alarm_clock: 전체 시간 *${totalTime}* :100: Score: ${score}\n\n`,
-    efficiencyRank: `:chart: 어떻게 시간을 썼나요?\n${efficiencies.map((efficiency) => `${efficiency.rank}. ${efficiency.efficiency} ${efficiency.totalTimeSpent}, 평균 ${efficiency.avgTimeSpent}\n`).join('')}`,
-    overviewRank: `어디에 시간을 썼나요?\n${overviews.map((overview) => `${overview.rank}. ${overview.totalTimeSpent}, 평균 ${overview.avgTimeSpent}을 ${overview.category}에 사용하였습니다.\n`).join('')}`,
+    totalHour: `:alarm_clock: 전체 시간 *${totalTime}* :bar_chart: Score: ${score} ${getScoreImogi(score)}\n\n`,
+    efficiencyRank: `:chart: 어떻게 시간을 썼나요?\n${efficiencies.map((efficiency) => `> - ${efficiency.efficiency} ${efficiency.totalTimeSpent} | 평균 *${efficiency.avgTimeSpent}*\n`).join('')}`,
+    overviewRank: `:man-shrugging: 어디에 시간을 썼나요?\n${overviews.map((overview) => `> - 평균 *${overview.avgTimeSpent}* (${overview.totalTimeSpent})을 \`${overview.category}\`에 사용하였습니다.\n`).join('')}`,
   }
 }

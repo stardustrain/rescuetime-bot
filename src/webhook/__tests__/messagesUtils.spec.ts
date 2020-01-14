@@ -1,12 +1,14 @@
 import {
   getProductiveImogi,
   getDistractingImogi,
+  getScoreImogi,
   generateWeeklyOverviewData,
   generateWeeklyActivityData,
   generateWeeklyefficiencyData,
   getScaledActivityScore,
   getAvgTimeSpent,
   getTotalTimeSpent,
+  generateEfficiencyMessageBlock,
 } from '../messageUtils'
 
 describe('messageUtils.ts', () => {
@@ -44,6 +46,28 @@ describe('messageUtils.ts', () => {
       expect(getDistractingImogi(1)).toEqual('')
       expect(getDistractingImogi(2)).toEqual(':weary:')
       expect(getDistractingImogi(3)).toEqual(':weary:')
+    })
+  })
+
+  describe('getScoreImogi()', () => {
+    test('should return :goodjob: when received score that gte 80.', () => {
+      expect(getScoreImogi(100)).toEqual(':goodjob:')
+      expect(getScoreImogi(90)).toEqual(':goodjob:')
+      expect(getScoreImogi(80)).toEqual(':goodjob:')
+      expect(getScoreImogi(79)).not.toEqual(':goodjob:')
+    })
+
+    test('should return empty string when received score that lt 80 and gte 50.', () => {
+      expect(getScoreImogi(80)).not.toEqual('')
+      expect(getScoreImogi(79)).toEqual('')
+      expect(getScoreImogi(50)).toEqual('')
+      expect(getScoreImogi(49)).not.toEqual('')
+    })
+
+    test('should return :skull: when received score that lt 50.', () => {
+      expect(getScoreImogi(50)).not.toEqual(':skull:')
+      expect(getScoreImogi(49)).toEqual(':skull:')
+      expect(getScoreImogi(25)).toEqual(':skull:')
     })
   })
 
@@ -191,11 +215,9 @@ describe('messageUtils.ts', () => {
         { rank: 4, timeSpent: 1967, efficiency: 'Productive Time' },
         { rank: 5, timeSpent: 1283, efficiency: 'Very Distracting Time' },
       ])).toEqual([
-        { rank: 1, timeSpent: 53080, totalTimeSpent: '14시간 44분', avgTimeSpent: '2시간 27분', efficiency: 'Very Productive Time' },
-        { rank: 2, timeSpent: 10990, totalTimeSpent: '3시간 3분', avgTimeSpent: '30분', efficiency: 'Distracting Time' },
-        { rank: 3, timeSpent: 10106, totalTimeSpent: '2시간 48분', avgTimeSpent: '28분', efficiency: 'Neutral Time' },
-        { rank: 4, timeSpent: 1967, totalTimeSpent: '32분', avgTimeSpent: '5분', efficiency: 'Productive Time' },
-        { rank: 5, timeSpent: 1283, totalTimeSpent: '21분', avgTimeSpent: '3분', efficiency: 'Very Distracting Time' },
+        { timeSpent: 55047, totalTimeSpent: '15시간 17분', avgTimeSpent: '2시간 32분', efficiency: 'Productive Time' },
+        { timeSpent: 12273, totalTimeSpent: '3시간 24분', avgTimeSpent: '34분', efficiency: 'Distracting Time' },
+        { timeSpent: 10106, totalTimeSpent: '2시간 48분', avgTimeSpent: '28분', efficiency: 'Neutral Time' },
       ])
     })
 
@@ -203,6 +225,26 @@ describe('messageUtils.ts', () => {
       const empty: any = {}
       expect(() => generateWeeklyefficiencyData()).toThrow('Efficiency generate failed.')
       expect(() => generateWeeklyefficiencyData(empty)).toThrow('Efficiency generate failed.')
+    })
+  })
+
+  describe('generateEfficiencyMessageBlock()', () =>{
+    // test('should return message with ', () => {
+    //   expect(generateEfficiencyMessageBlock([
+    //     { timeSpent: 53080, totalTimeSpent: '14시간 44분', avgTimeSpent: '2시간 27분', efficiency: 'Very Productive Time' },
+    //     { timeSpent: 10990, totalTimeSpent: '3시간 3분', avgTimeSpent: '30분', efficiency: 'Distracting Time' },
+    //     { timeSpent: 10106, totalTimeSpent: '2시간 48분', avgTimeSpent: '28분', efficiency: 'Neutral Time' },
+    //     { timeSpent: 1967, totalTimeSpent: '32분', avgTimeSpent: '5분', efficiency: 'Productive Time' },
+    //     { timeSpent: 1283, totalTimeSpent: '21분', avgTimeSpent: '3분', efficiency: 'Very Distracting Time' },
+    //   ])).toEqual(`
+    //     *Very Productive Time* 
+    //   `)
+    // })
+
+    test('should rasing error when received invalid data.', () => {
+      const empty: any = {}
+      expect(() => generateEfficiencyMessageBlock()).toThrow('Efficiency message block generate failed.')
+      expect(() => generateEfficiencyMessageBlock(empty)).toThrow('Efficiency message block generate failed.')
     })
   })
 })
