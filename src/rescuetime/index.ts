@@ -30,8 +30,8 @@ export const getWeeklyData = async () => {
 
     const queryObject = {
       format: 'json',
-      rb: '2020-01-05',
-      re: '2020-01-11',
+      rb: from,
+      re: to,
       rk: 'overview',
     }
 
