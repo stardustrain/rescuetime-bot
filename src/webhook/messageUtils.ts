@@ -7,8 +7,8 @@ import { mergeTimeByCategory } from '../utils/misc'
 import { ParsedOverview, ParsedActivity, Parsedefficiency } from '../rescuetime/weeklyReportUtils'
 
 // 4 hour spent productive activity on 6 days, last 2 is value of weightedProductivty.
-const OBJECTIVE_PRODUCTIVITY_SCORE = 6 * 4 * 3600 * 2
-const OBJECTIVE_PRODUCTIVITY_DAILY_SCORE = 4 * 3600 * 2
+const OBJECTIVE_PRODUCTIVITY_SCORE = 5 * 4 * 3600 * 2
+const OBJECTIVE_PRODUCTIVITY_DAILY_SCORE = 5 * 3600 * 2
 
 const STANDARD_PRODUCTIVE_TIME = 4
 const MINIMUM_PRODUCTIVE_TIME = 2
