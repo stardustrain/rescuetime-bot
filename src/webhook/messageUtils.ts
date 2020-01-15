@@ -1,13 +1,14 @@
-import { gt, lte, cond, always, T, values, all, equals, pick, reduce, isNil, isEmpty, indexBy, prop } from 'ramda'
-import { camelizeKeys } from 'humps'
+import { gt, lte, cond, always, T, values, all, equals, pick, reduce, isNil, isEmpty, take } from 'ramda'
 
 import { scaleLinear } from 'd3-scale'
 
 import { parseTime } from '../utils/parseUtils'
+import { mergeTimeByCategory } from '../utils/misc'
 import { ParsedOverview, ParsedActivity, Parsedefficiency } from '../rescuetime/weeklyReportUtils'
 
 // 4 hour spent productive activity on 6 days, last 2 is value of weightedProductivty.
-const OBJECTIVE_PRODUCTIVITY_SCORE = 4 * 6 * 3600 * 2
+const OBJECTIVE_PRODUCTIVITY_SCORE = 6 * 4 * 3600 * 2
+const OBJECTIVE_PRODUCTIVITY_DAILY_SCORE = 4 * 3600 * 2
 
 const STANDARD_PRODUCTIVE_TIME = 4
 const MINIMUM_PRODUCTIVE_TIME = 2
@@ -53,10 +54,14 @@ export const format = (time: { hour: number, mins: number, isDecrease: boolean }
   return `${time.isDecrease ? '-' : ''}${formattedMessage}`
 }
 
-export const getScaledActivityScore = (activityScores: ParsedActivity[]) => {
-  const totalScore = reduce((acc, v) => acc + (v.timeSpent * v.weightedProductivty), 0, activityScores)
+export const getScaledActivityScore = ({
+  activities,
+  isDayily = false,
+}: { activities: ParsedActivity[], isDayily?: boolean}) => {
+  const objectiveScore = isDayily ? OBJECTIVE_PRODUCTIVITY_DAILY_SCORE : OBJECTIVE_PRODUCTIVITY_SCORE
+  const totalScore = reduce((acc, v) => acc + (v.timeSpent * v.weightedProductivty), 0, activities)
   const scale = scaleLinear()
-    .domain([0, OBJECTIVE_PRODUCTIVITY_SCORE])
+    .domain([0, objectiveScore])
     .range([0, 100])
 
   return Math.floor(scale(totalScore))
@@ -73,7 +78,7 @@ export const generateWeeklyOverviewData = (overviews?: ParsedOverview[]) => {
     throw Error('Overview generate failed.')
   }
 
-  return overviews.map(({ rank, timeSpent, category }) => ({
+  return take(5, overviews).map(({ rank, timeSpent, category }) => ({
     rank,
     totalTimeSpent: getTotalTimeSpent(timeSpent),
     avgTimeSpent: getAvgTimeSpent(timeSpent),
@@ -86,8 +91,8 @@ export const generateWeeklyActivityData = (activities?: ParsedActivity[]) => {
     throw Error('Activity generate failed.')
   }
 
-  const score = getScaledActivityScore(activities)
-  const results = activities.map(({ rank, timeSpent, activity }) => ({
+  const score = getScaledActivityScore({ activities })
+  const results = take(5, activities).map(({ rank, timeSpent, activity }) => ({
     rank,
     totalTimeSpent: getTotalTimeSpent(timeSpent),
     avgTimeSpent: getAvgTimeSpent(timeSpent),
@@ -105,30 +110,22 @@ export const generateWeeklyefficiencyData = (efficiencies?: Parsedefficiency[]) 
     throw Error('Efficiency generate failed.')
   }
 
-  const ce = camelizeKeys(indexBy(prop('efficiency'), efficiencies)) as {[key: string]: Parsedefficiency}
+  const { productiveTime, distractingTime, neutralTime } = mergeTimeByCategory(efficiencies)
 
   return [{
-    timeSpent: ce.productiveTime.timeSpent + ce.veryProductiveTime.timeSpent,
-    totalTimeSpent: getTotalTimeSpent(ce.productiveTime.timeSpent + ce.veryProductiveTime.timeSpent),
-    avgTimeSpent: getAvgTimeSpent(ce.productiveTime.timeSpent + ce.veryProductiveTime.timeSpent),
+    timeSpent: productiveTime,
+    totalTimeSpent: getTotalTimeSpent(productiveTime),
+    avgTimeSpent: getAvgTimeSpent(productiveTime),
     efficiency: 'Productive Time',
   }, {
-    timeSpent: ce.distractingTime.timeSpent + ce.veryDistractingTime.timeSpent,
-    totalTimeSpent: getTotalTimeSpent(ce.distractingTime.timeSpent + ce.veryDistractingTime.timeSpent),
-    avgTimeSpent: getAvgTimeSpent(ce.distractingTime.timeSpent + ce.veryDistractingTime.timeSpent),
+    timeSpent: distractingTime,
+    totalTimeSpent: getTotalTimeSpent(distractingTime),
+    avgTimeSpent: getAvgTimeSpent(distractingTime),
     efficiency: 'Distracting Time',
   }, {
-    timeSpent: ce.neutralTime.timeSpent,
-    totalTimeSpent: getTotalTimeSpent(ce.neutralTime.timeSpent),
-    avgTimeSpent: getAvgTimeSpent(ce.neutralTime.timeSpent),
+    timeSpent: neutralTime,
+    totalTimeSpent: getTotalTimeSpent(neutralTime),
+    avgTimeSpent: getAvgTimeSpent(neutralTime),
     efficiency: 'Neutral Time',
   }]
-}
-
-export const generateEfficiencyMessageBlock = (efficiencies?: ReturnType<typeof generateWeeklyefficiencyData>) => {
-  if (isNil(efficiencies) || isEmpty(efficiencies)) {
-    throw Error('Efficiency message block generate failed.')
-  }
-
-
 }

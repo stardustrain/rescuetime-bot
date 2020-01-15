@@ -13,7 +13,7 @@ const webhook = new IncomingWebhook(HOOK_URL)
 export const sendDailyWebHook = async () => {
   const dailyData = await getDailyData()
   const { totalHour, productiveTime, distractingTime, devTime } = generateTodayMessage(dailyData?.summary, dailyData?.compareYesterday)
-  const currentDate = dailyData?.summary.date ?? dayjs().subtract(1, 'day').format('YYYY-MM-DD')
+  const currentDate = dailyData?.date ?? dayjs().subtract(1, 'day').format('YYYY-MM-DD')
 
   try {
     await webhook.send(dailyMessageBlock({

@@ -5,17 +5,18 @@ import {
 describe('messages.ts', () => {
   describe('generateCompareMessage(data?: {[key: string]: any})', () => {
     test('should return generated data when received valid data.', () => {
-      expect(generateCompareMessage({
-        allProductiveMins: {
-          compare: 158,
+      const data: any = {
+        allProductiveTime: {
+          compare: 9480,
         },
-        allDistractingMins: {
-          compare: 120,
+        allDistractingTime: {
+          compare: 7200,
         },
-        softwareDevelopmentMins: {
-          compare: 130,
+        softwareDevelopmentTime: {
+          compare: 7800,
         },
-      })).toEqual({
+      }
+      expect(generateCompareMessage(data)).toEqual({
         compareProductiveImogi: ':chart_with_upwards_trend:',
         compareProductiveTime: '2시간 38분',
         compareDistractingImogi: ':chart_with_upwards_trend:',
@@ -24,17 +25,18 @@ describe('messages.ts', () => {
         compareSoftwareTime: '2시간 10분',
       })
 
-      expect(generateCompareMessage({
-        allProductiveMins: {
-          compare: 20,
+      const other: any = {
+        allProductiveTime: {
+          compare: 1200,
         },
-        allDistractingMins: {
-          compare: -10,
+        allDistractingTime: {
+          compare: -600,
         },
-        softwareDevelopmentMins: {
-          compare: 130,
+        softwareDevelopmentTime: {
+          compare: 7800,
         },
-      })).toEqual({
+      }
+      expect(generateCompareMessage(other)).toEqual({
         compareProductiveImogi: ':chart_with_upwards_trend:',
         compareProductiveTime: '20분',
         compareDistractingImogi: ':chart_with_downwards_trend:',
@@ -45,7 +47,8 @@ describe('messages.ts', () => {
     })
 
     test('should rasing error when received invalid data.', () => {
-      expect(() => generateCompareMessage({})).toThrow('Yesterday compare message generate failed.')
+      const empty: any = {}
+      expect(() => generateCompareMessage(empty)).toThrow('Yesterday compare message generate failed.')
     })
   })
 })
