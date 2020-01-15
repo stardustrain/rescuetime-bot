@@ -144,12 +144,22 @@ describe('messageUtils.ts', () => {
           category: 'General Software Development',
           weightedProductivty: 2,
         }],
-      })).toEqual(41)
+      })).toEqual(32)
 
       expect(getScaledActivityScore({
         activities: [{
           rank: 1,
           timeSpent: 4 * 6 * 3600,
+          activity: 'Visual Studio Code',
+          category: 'Editing & IDEs',
+          weightedProductivty: 2,
+        }],
+      })).toEqual(80)
+
+      expect(getScaledActivityScore({
+        activities: [{
+          rank: 1,
+          timeSpent: 5 * 6 * 3600,
           activity: 'Visual Studio Code',
           category: 'Editing & IDEs',
           weightedProductivty: 2,
@@ -189,7 +199,7 @@ describe('messageUtils.ts', () => {
           weightedProductivty: 2,
         }],
         isDayily: true,
-      })).toEqual(41)
+      })).toEqual(33)
     })
   })
 
@@ -226,7 +236,7 @@ describe('messageUtils.ts', () => {
         category: 'General Software Development',
         weightedProductivty: 2,
       }])).toEqual({
-        score: 41,
+        score: 32,
         rows: [
           { rank: 1, totalTimeSpent: '8시간 2분', avgTimeSpent: '1시간 20분', activity: 'Visual Studio Code' },
           { rank: 2, totalTimeSpent: '3시간 2분', avgTimeSpent: '30분', activity: 'Slack' },

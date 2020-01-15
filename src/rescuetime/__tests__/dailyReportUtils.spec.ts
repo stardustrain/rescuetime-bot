@@ -64,7 +64,7 @@ describe('dailyReportUtils.ts', () => {
         productiveTimePercentage: 68,
         distractingTimePercentage: 13.4,
         programDevlopmentTimePercentage: 57.7,
-        score: 43,
+        score: 35,
       })
     })
   })
