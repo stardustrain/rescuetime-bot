@@ -10,7 +10,7 @@ import {
 } from './weeklyReportUtils'
 
 export const getDailyData = async () => {
-  const t = dayjs().subtract(1, 'day')
+  const t = dayjs()
   const today = t.format('YYYY-MM-DD')
   const yesterday = t.subtract(1, 'day').format('YYYY-MM-DD')
 
