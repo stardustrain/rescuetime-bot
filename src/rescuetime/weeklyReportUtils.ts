@@ -1,4 +1,4 @@
-import { take, map } from 'ramda'
+import { map } from 'ramda'
 import dayjs from 'dayjs'
 
 import { Overview, Activity, Efficiency } from '../@types/models'
@@ -24,9 +24,7 @@ export const parseOverview = (overview: Overview) =>
       rank: row[0],
       timeSpent: row[1],
       category: row[3],
-    }),
-    take(5, overview.rows),
-  )
+    }), overview.rows)
 
 export const parseActivity = (activity: Activity) =>
   map(
@@ -36,9 +34,7 @@ export const parseActivity = (activity: Activity) =>
       activity: row[3],
       category: row[4],
       weightedProductivty: row[5],
-    }),
-    take(5, activity.rows),
-  )
+    }), activity.rows)
 
 export const parseEfficiency = (efficiency: Efficiency) =>
   map(
@@ -46,6 +42,4 @@ export const parseEfficiency = (efficiency: Efficiency) =>
       rank: row[0],
       timeSpent: row[1],
       efficiency: row[3],
-    }),
-    efficiency.rows,
-  )
+    }), efficiency.rows)

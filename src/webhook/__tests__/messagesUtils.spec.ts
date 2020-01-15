@@ -8,7 +8,6 @@ import {
   getScaledActivityScore,
   getAvgTimeSpent,
   getTotalTimeSpent,
-  generateEfficiencyMessageBlock,
 } from '../messageUtils'
 
 describe('messageUtils.ts', () => {
@@ -113,45 +112,84 @@ describe('messageUtils.ts', () => {
 
   describe('getScaledActivityScore(activityScores: ParsedActivity[])', () => {
     test('should return scaled score.', () => {
-      expect(getScaledActivityScore([{
-        rank: 1,
-        timeSpent: 28930,
-        activity: 'Visual Studio Code',
-        category: 'Editing & IDEs',
-        weightedProductivty: 2,
-      }, {
-        rank: 2,
-        timeSpent: 10946,
-        activity: 'Slack',
-        category: 'Instant Message',
-        weightedProductivty: -1,
-      }, {
-        rank: 3,
-        timeSpent: 5580,
-        activity: 'github.com',
-        category: 'General Software Development',
-        weightedProductivty: 2,
-      }, {
-        rank: 4,
-        timeSpent: 3541,
-        activity: 'Terminal',
-        category: 'Systems Operations',
-        weightedProductivty: 2,
-      }, {
-        rank: 5,
-        timeSpent: 2987,
-        activity: 'localhost:3000',
-        category: 'General Software Development',
-        weightedProductivty: 2,
-      }])).toEqual(41)
+      expect(getScaledActivityScore({
+        activities:[{
+          rank: 1,
+          timeSpent: 28930,
+          activity: 'Visual Studio Code',
+          category: 'Editing & IDEs',
+          weightedProductivty: 2,
+        }, {
+          rank: 2,
+          timeSpent: 10946,
+          activity: 'Slack',
+          category: 'Instant Message',
+          weightedProductivty: -1,
+        }, {
+          rank: 3,
+          timeSpent: 5580,
+          activity: 'github.com',
+          category: 'General Software Development',
+          weightedProductivty: 2,
+        }, {
+          rank: 4,
+          timeSpent: 3541,
+          activity: 'Terminal',
+          category: 'Systems Operations',
+          weightedProductivty: 2,
+        }, {
+          rank: 5,
+          timeSpent: 2987,
+          activity: 'localhost:3000',
+          category: 'General Software Development',
+          weightedProductivty: 2,
+        }],
+      })).toEqual(41)
 
-      expect(getScaledActivityScore([{
-        rank: 1,
-        timeSpent: 4 * 6 * 3600,
-        activity: 'Visual Studio Code',
-        category: 'Editing & IDEs',
-        weightedProductivty: 2,
-      }])).toEqual(100)
+      expect(getScaledActivityScore({
+        activities: [{
+          rank: 1,
+          timeSpent: 4 * 6 * 3600,
+          activity: 'Visual Studio Code',
+          category: 'Editing & IDEs',
+          weightedProductivty: 2,
+        }],
+      })).toEqual(100)
+
+      expect(getScaledActivityScore({
+        activities: [{
+          rank: 1,
+          timeSpent: 4821,
+          activity: 'Visual Studio Code',
+          category: 'Editing & IDEs',
+          weightedProductivty: 2,
+        }, {
+          rank: 2,
+          timeSpent: 1824,
+          activity: 'Slack',
+          category: 'Instant Message',
+          weightedProductivty: -1,
+        }, {
+          rank: 3,
+          timeSpent: 930,
+          activity: 'github.com',
+          category: 'General Software Development',
+          weightedProductivty: 2,
+        }, {
+          rank: 4,
+          timeSpent: 708,
+          activity: 'Terminal',
+          category: 'Systems Operations',
+          weightedProductivty: 2,
+        }, {
+          rank: 5,
+          timeSpent: 497,
+          activity: 'localhost:3000',
+          category: 'General Software Development',
+          weightedProductivty: 2,
+        }],
+        isDayily: true,
+      })).toEqual(41)
     })
   })
 
@@ -225,26 +263,6 @@ describe('messageUtils.ts', () => {
       const empty: any = {}
       expect(() => generateWeeklyefficiencyData()).toThrow('Efficiency generate failed.')
       expect(() => generateWeeklyefficiencyData(empty)).toThrow('Efficiency generate failed.')
-    })
-  })
-
-  describe('generateEfficiencyMessageBlock()', () =>{
-    // test('should return message with ', () => {
-    //   expect(generateEfficiencyMessageBlock([
-    //     { timeSpent: 53080, totalTimeSpent: '14시간 44분', avgTimeSpent: '2시간 27분', efficiency: 'Very Productive Time' },
-    //     { timeSpent: 10990, totalTimeSpent: '3시간 3분', avgTimeSpent: '30분', efficiency: 'Distracting Time' },
-    //     { timeSpent: 10106, totalTimeSpent: '2시간 48분', avgTimeSpent: '28분', efficiency: 'Neutral Time' },
-    //     { timeSpent: 1967, totalTimeSpent: '32분', avgTimeSpent: '5분', efficiency: 'Productive Time' },
-    //     { timeSpent: 1283, totalTimeSpent: '21분', avgTimeSpent: '3분', efficiency: 'Very Distracting Time' },
-    //   ])).toEqual(`
-    //     *Very Productive Time* 
-    //   `)
-    // })
-
-    test('should rasing error when received invalid data.', () => {
-      const empty: any = {}
-      expect(() => generateEfficiencyMessageBlock()).toThrow('Efficiency message block generate failed.')
-      expect(() => generateEfficiencyMessageBlock(empty)).toThrow('Efficiency message block generate failed.')
     })
   })
 })

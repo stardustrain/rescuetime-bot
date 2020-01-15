@@ -2,6 +2,8 @@ import { isNil, pipe, toPairs, map, join } from 'ramda'
 
 const floor = Math.floor
 
+
+//NOTE: time unit is hour. ex) 1h 30min -> time: 1.5
 export const parseTime = (time?: number) => {
   if (isNil(time)) {
     throw Error('Wrong time.')

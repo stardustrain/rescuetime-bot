@@ -7,3 +7,5 @@ export const sendDailyReport = () => {
 export const sendWeeklyReport = () => {
   sendWeeklyWebHook()
 }
+
+sendDailyReport()

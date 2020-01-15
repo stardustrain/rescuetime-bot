@@ -46,6 +46,14 @@ describe('weeklyReportUtils.ts', () => {
         rank: 5,
         timeSpent: 3605,
         category: 'Utilities',
+      }, {
+        rank: 6,
+        timeSpent: 3126,
+        category: 'Reference & Learning',
+      }, {
+        rank: 7,
+        timeSpent: 1403,
+        category: 'News & Opinion',
       }])
     })
 
@@ -55,7 +63,7 @@ describe('weeklyReportUtils.ts', () => {
   })
 
   describe('parseActivity(activity: Activity)', () => {
-    test('should return first 5 array of object which pairs row header and row.', () => {
+    test('should return object which pairs row header and row.', () => {
       const activity: any = {
         rowHeaders: [
           'Rank',
@@ -105,6 +113,12 @@ describe('weeklyReportUtils.ts', () => {
         activity: 'ondemandkorea.atlassian.net',
         category: 'General Business',
         weightedProductivty: 2,
+      }, {
+        rank: 6,
+        timeSpent: 3012,
+        activity: 'felipecastro.com',
+        category: 'Uncategorized',
+        weightedProductivty: 0,
       }])
     })
 

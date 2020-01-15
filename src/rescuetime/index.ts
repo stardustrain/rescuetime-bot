@@ -1,4 +1,5 @@
-import { request, generateUrl, requestAll } from '../utils/api'
+import dayjs from 'dayjs'
+import { generateUrl, requestAll } from '../utils/api'
 import { getQueryString } from '../utils/parseUtils'
 import { getDayilDataSummary, compareWithYesterday } from './dailyReportUtils'
 import {
@@ -8,16 +9,65 @@ import {
   getWeekRange,
 } from './weeklyReportUtils'
 
-import { DailySummary } from '../@types/models'
-
 export const getDailyData = async () => {
+  const t = dayjs().subtract(1, 'day')
+  const today = t.format('YYYY-MM-DD')
+  const yesterday = t.subtract(1, 'day').format('YYYY-MM-DD')
+
+  const queryObject = {
+    format: 'json',
+    rb: today,
+    re: today,
+    rk: 'efficiency',
+  }
+
+  const todayEfficiencyUrl = `${generateUrl('/data')}&${getQueryString(queryObject)}`
+  const yesterDayEfficiencyUrl = `${generateUrl('/data')}&${getQueryString({
+    ...queryObject,
+    rb: yesterday,
+    re: yesterday,
+  })}`
+
+  const todayOverviewUrl = `${generateUrl('/data')}&${getQueryString({
+    ...queryObject,
+    rk: 'overview',
+  })}`
+  const yesterdayOverviewUrl = `${generateUrl('/data')}&${getQueryString({
+    ...queryObject,
+    rb: yesterday,
+    re: yesterday,
+    rk: 'overview',
+  })}`
+
+  const activityUrl = `${generateUrl('/data')}&${getQueryString({
+    ...queryObject,
+    rk: 'activity',
+  })}`
+
   try {
-    const { data } = await request<DailySummary[]>(
-      generateUrl('/daily_summary_feed'),
-    )
+    const [todayEfficiency, yesterDayEfficiency, todayOverview, yesterdayOverview, activity] = await requestAll([
+      todayEfficiencyUrl,
+      yesterDayEfficiencyUrl,
+      todayOverviewUrl,
+      yesterdayOverviewUrl,
+      activityUrl,
+    ])
+
+    const todaySummary = getDayilDataSummary({
+      efficiency: todayEfficiency,
+      overview: todayOverview,
+      activity,
+    })
+    const yesterdaySummary = getDayilDataSummary({
+      efficiency: yesterDayEfficiency,
+      overview: yesterdayOverview,
+      activity,
+    })
+
     return {
-      summary: getDayilDataSummary(data),
-      compareYesterday: compareWithYesterday(data),
+      summary: todaySummary,
+      compareYesterday: compareWithYesterday([todaySummary, yesterdaySummary]),
+      date: today,
     }
   } catch (e) {
     console.error(e)
