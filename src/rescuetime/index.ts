@@ -1,4 +1,3 @@
-import dayjs from 'dayjs'
 import { generateUrl, requestAll } from '../utils/api'
 import { getQueryString } from '../utils/parseUtils'
 import { getDayilDataSummary, compareWithYesterday } from './dailyReportUtils'
@@ -8,11 +7,12 @@ import {
   parseEfficiency,
   getWeekRange,
 } from './weeklyReportUtils'
+import { getToday } from '../utils/misc'
 
 export const getDailyData = async () => {
-  const t = dayjs()
-  const today = t.format('YYYY-MM-DD')
-  const yesterday = t.subtract(1, 'day').format('YYYY-MM-DD')
+  const t = getToday()
+  const today = t.subtract(1, 'day').format('YYYY-MM-DD')
+  const yesterday = t.subtract(2, 'day').format('YYYY-MM-DD')
 
   const queryObject = {
     format: 'json',

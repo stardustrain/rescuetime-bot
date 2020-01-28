@@ -1,10 +1,10 @@
 import { IncomingWebhook } from '@slack/webhook'
-import dayjs from 'dayjs'
 
 import { getWeekRange } from '../rescuetime/weeklyReportUtils'
 import { getDailyData, getWeeklyData } from '../rescuetime'
 import { generateTodayMessage, generateWeeklyMessage } from './messages'
 import { dailyMessageBlock, weeklyMessageBlock } from './messageBlocks'
+import { getToday } from '../utils/misc'
 
 const HOOK_URL = process.env.HOOK_URL || ''
 
@@ -13,7 +13,7 @@ const webhook = new IncomingWebhook(HOOK_URL)
 export const sendDailyWebHook = async () => {
   const dailyData = await getDailyData()
   const { totalHour, productiveTime, distractingTime, devTime } = generateTodayMessage(dailyData?.summary, dailyData?.compareYesterday)
-  const currentDate = dailyData?.date ?? dayjs().subtract(1, 'day').format('YYYY-MM-DD')
+  const currentDate = dailyData?.date ?? getToday().subtract(1, 'day').format('YYYY-MM-DD')
 
   try {
     await webhook.send(dailyMessageBlock({

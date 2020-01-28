@@ -1,4 +1,4 @@
-import { mergeTimeByCategory } from '../misc'
+import { mergeTimeByCategory, getSpentTime } from '../misc'
 
 describe('misc.ts', () => {
   describe('mergeTimeByCategory(efficiencies: Parsedefficiency[])', () => {
@@ -14,6 +14,18 @@ describe('misc.ts', () => {
         distractingTime: 12273,
         neutralTime: 10106,
       })
+    })
+  })
+
+  describe('getSpentTime(ce: Parsedefficiency)', () => {
+    test('should return value of timeSpent.', () => {
+      expect(getSpentTime({ rank: 1, timeSpent: 53080, efficiency: 'Very Productive Time' })).toEqual(53080)
+    })
+
+    test('should return 0 when received invalid Parsedefficiency.', () => {
+      const empty: any = {}
+      expect(getSpentTime(empty)).toEqual(0)
+      expect(getSpentTime()).toEqual(0)
     })
   })
 })
