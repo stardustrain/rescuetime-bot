@@ -1,10 +1,9 @@
 import { IncomingWebhook } from '@slack/webhook'
 
-import { getWeekRange } from '../rescuetime/weeklyReportUtils'
 import { getDailyData, getWeeklyData } from '../rescuetime'
 import { generateTodayMessage, generateWeeklyMessage } from './messages'
 import { dailyMessageBlock, weeklyMessageBlock } from './messageBlocks'
-import { getToday } from '../utils/misc'
+import { getToday, getWeekRange } from '../utils/misc'
 
 const HOOK_URL = process.env.HOOK_URL || ''
 
