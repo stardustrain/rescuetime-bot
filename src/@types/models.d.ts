@@ -25,3 +25,19 @@ export type WeeklyData = WeeklyDataModel & {
   from: string
   to: string
 }
+
+interface DailySummary {
+  totalTime: number
+  productiveTime: number
+  distractingTime: number
+  programDevlopmentTime: number
+  productiveTimePercentage: number
+  distractingTimePercentage: number
+  programDevlopmentTimePercentage: number
+  score: number
+}
+
+export interface FirestoreInsertData {
+  date: string
+  data: DailySummary | null
+}

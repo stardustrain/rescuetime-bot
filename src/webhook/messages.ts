@@ -44,8 +44,8 @@ export const generateTodayMessage = (summaryData?: DailySummary, compareData?: C
   const distractingTime = parseTimeFromSeconds(summaryData.distractingTime)
   const programTime = parseTimeFromSeconds(summaryData.programDevlopmentTime)
 
-  const produtiveEmogi = (typeof productiveTime === 'string') ? '' : getProductiveImogi((productiveTime.hour))
-  const distractingEmogi = (typeof distractingTime === 'string') ? '' : getDistractingImogi((distractingTime.hour))
+  const produtiveEmogi = typeof productiveTime === 'string' ? '' : getProductiveImogi(productiveTime.hour)
+  const distractingEmogi = typeof distractingTime === 'string' ? '' : getDistractingImogi(distractingTime.hour)
 
   const {
     compareProductiveImogi,
@@ -57,10 +57,18 @@ export const generateTodayMessage = (summaryData?: DailySummary, compareData?: C
   } = generateCompareMessage(compareData)
 
   return {
-    totalHour: `:alarm_clock: 전체 시간 *${format(parseTimeFromSeconds(summaryData.totalTime))}* :heartbeat: Score ${summaryData.score}\n\n`,
-    productiveTime: `:runner: 생산성 ${produtiveEmogi}\n>:alarm_clock: *${format(productiveTime)}* | ${summaryData.productiveTimePercentage}% | ${compareProductiveImogi} ${compareProductiveTime}\n\n`,
-    distractingTime: `:zany_face: 산만함 ${distractingEmogi}\n>:alarm_clock: *${format(distractingTime)}* | ${summaryData.distractingTimePercentage}% | ${compareDistractingImogi} ${compareDistractingTime}\n\n`,
-    devTime: `:computer: 프로그램 개발 ${produtiveEmogi}\n>:alarm_clock: *${format(programTime)}* | ${summaryData.programDevlopmentTimePercentage}% | ${compareSoftwareDevelopmentImogi} ${compareSoftwareTime}`,
+    totalHour: `:alarm_clock: 전체 시간 *${format(parseTimeFromSeconds(summaryData.totalTime))}* :heartbeat: Score ${
+      summaryData.score
+    }\n\n`,
+    productiveTime: `:runner: 생산성 ${produtiveEmogi}\n>:alarm_clock: *${format(productiveTime)}* | ${
+      summaryData.productiveTimePercentage
+    }% | ${compareProductiveImogi} ${compareProductiveTime}\n\n`,
+    distractingTime: `:zany_face: 산만함 ${distractingEmogi}\n>:alarm_clock: *${format(distractingTime)}* | ${
+      summaryData.distractingTimePercentage
+    }% | ${compareDistractingImogi} ${compareDistractingTime}\n\n`,
+    devTime: `:computer: 프로그램 개발 ${produtiveEmogi}\n>:alarm_clock: *${format(programTime)}* | ${
+      summaryData.programDevlopmentTimePercentage
+    }% | ${compareSoftwareDevelopmentImogi} ${compareSoftwareTime}`,
   }
 }
 
@@ -74,14 +82,34 @@ export const generateWeeklyMessage = (weeklyData?: WeeklyData) => {
   const overviews = generateWeeklyOverviewData(weeklyData.overview)
 
   const totalTime = pipe(
-    reduce<WeeklyefficiencyData[0], number>((acc, v) => acc + (v.timeSpent / (60 * 60)), 0),
+    reduce<WeeklyefficiencyData[0], number>((acc, v) => acc + v.timeSpent / (60 * 60), 0),
     parseTime,
     format,
   )(efficiencies)
 
   return {
     totalHour: `:alarm_clock: 전체 시간 *${totalTime}* :bar_chart: Score: ${score} ${getScoreImogi(score)}\n\n`,
-    efficiencyRank: `:chart: 어떻게 시간을 썼나요?\n${efficiencies.map((efficiency) => `> - ${efficiency.efficiency} ${efficiency.totalTimeSpent} | 평균 *${efficiency.avgTimeSpent}*\n`).join('')}`,
-    overviewRank: `:man-shrugging: 어디에 시간을 썼나요?\n${overviews.map((overview) => `> - 평균 *${overview.avgTimeSpent}* (${overview.totalTimeSpent})을 \`${overview.category}\`에 사용하였습니다.\n`).join('')}`,
+    efficiencyRank: `:chart: 어떻게 시간을 썼나요?\n${efficiencies
+      .map(
+        (efficiency) =>
+          `> - ${efficiency.efficiency} ${efficiency.totalTimeSpent} | 평균 *${efficiency.avgTimeSpent}*\n`,
+      )
+      .join('')}`,
+    overviewRank: `:man-shrugging: 어디에 시간을 썼나요?\n${overviews
+      .map(
+        (overview) =>
+          `> - 평균 *${overview.avgTimeSpent}* (${overview.totalTimeSpent})을 \`${overview.category}\`에 사용하였습니다.\n`,
+      )
+      .join('')}`,
   }
 }
+
+export const getDataEmptyMessage = () => [
+  {
+    type: 'section',
+    text: {
+      type: 'mrkdwn',
+      text: ':man-shrugging: It does not recorded data to rescuetime today.',
+    },
+  },
+]

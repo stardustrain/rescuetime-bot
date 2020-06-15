@@ -1,12 +1,7 @@
 import { getDayilDataSummary } from '../dailyReportUtils'
 
 const efficiency: any = {
-  rowHeaders: [
-    'Rank',
-    'Time Spent (seconds)',
-    'Number of People',
-    'Efficiency',
-  ],
+  rowHeaders: ['Rank', 'Time Spent (seconds)', 'Number of People', 'Efficiency'],
   rows: [
     [1, 48287, 1, 'Very Productive Time'],
     [2, 14049, 1, 'Neutral Time'],
@@ -17,14 +12,7 @@ const efficiency: any = {
 }
 
 const activity: any = {
-  rowHeaders: [
-    'Rank',
-    'Time Spent (seconds)',
-    'Number of People',
-    'Activity',
-    'Category',
-    'Productivity',
-  ],
+  rowHeaders: ['Rank', 'Time Spent (seconds)', 'Number of People', 'Activity', 'Category', 'Productivity'],
   rows: [
     [1, 3669, 1, 'Visual Studio Code', 'Editing & IDEs', 2],
     [2, 1667, 1, 'github.com', 'General Software Development', 2],
@@ -36,12 +24,7 @@ const activity: any = {
 }
 
 const overview: any = {
-  rowHeaders: [
-    'Rank',
-    'Time Spent (seconds)',
-    'Number of People',
-    'Category',
-  ],
+  rowHeaders: ['Rank', 'Time Spent (seconds)', 'Number of People', 'Category'],
   rows: [
     [1, 43490, 1, 'Software Development'],
     [2, 10513, 1, 'Communication & Scheduling'],
@@ -56,7 +39,7 @@ const overview: any = {
 describe('dailyReportUtils.ts', () => {
   describe('getDayilDataSummary(efficiency: Efficiency, overview: Overview)', () => {
     test('should return object by calculated time.', () => {
-      expect(getDayilDataSummary({efficiency, overview, activity})).toEqual({
+      expect(getDayilDataSummary({ efficiency, overview, activity })).toEqual({
         totalTime: 75387,
         productiveTime: 51231,
         distractingTime: 10107,

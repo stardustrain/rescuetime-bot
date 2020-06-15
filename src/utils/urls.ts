@@ -57,9 +57,7 @@ export const weeklyDataRequestUrls = (() => {
     rk: 'overview',
   }
 
-  const overviewUrl = `${generateUrl('/data')}&${getQueryString(
-    queryObject,
-  )}`
+  const overviewUrl = `${generateUrl('/data')}&${getQueryString(queryObject)}`
   const activityUrl = `${generateUrl('/data')}&${getQueryString({
     ...queryObject,
     rk: 'activity',
