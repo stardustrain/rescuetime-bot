@@ -16,5 +16,3 @@ export const sendDailyReport = async () => {
 export const sendWeeklyReport = () => {
   sendWeeklyWebHook()
 }
-
-sendDailyReport()
