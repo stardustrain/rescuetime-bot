@@ -1,11 +1,21 @@
 import admin from 'firebase-admin'
-import functions from 'firebase-functions'
+import { isNil } from 'ramda'
 import dayjs from 'dayjs'
 
 import { FirestoreInsertData } from '../@types/models'
 
 const initializeFirestore = () => {
-  admin.initializeApp(functions.config().firebase)
+  const serviceAccount = process.env.FIRESTORE_SA_KEY
+
+  if (isNil(serviceAccount)) {
+    throw Error('Does not received service account')
+  }
+
+  const parsedServiceAccount = JSON.parse(Buffer.from(serviceAccount, 'base64').toString())
+
+  admin.initializeApp({
+    credential: admin.credential.cert(parsedServiceAccount),
+  })
 
   return admin.firestore()
 }
