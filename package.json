@@ -25,6 +25,7 @@
     "axios": "^0.19.0",
     "d3-scale": "^3.2.1",
     "dayjs": "^1.8.18",
+    "firebase-admin": "^8.12.1",
     "humps": "^2.0.1",
     "ramda": "^0.26.1",
     "typescript": "^3.9.5"
