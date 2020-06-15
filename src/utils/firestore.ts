@@ -1,19 +1,11 @@
 import admin from 'firebase-admin'
-import { isNil } from 'ramda'
+import functions from 'firebase-functions'
 import dayjs from 'dayjs'
 
 import { FirestoreInsertData } from '../@types/models'
 
 const initializeFirestore = () => {
-  const serviceAccount = admin.credential.applicationDefault()
-
-  if (isNil(serviceAccount)) {
-    throw Error('Does not received service account')
-  }
-
-  admin.initializeApp({
-    credential: serviceAccount,
-  })
+  admin.initializeApp(functions.config().firebase)
 
   return admin.firestore()
 }
