@@ -5,16 +5,14 @@ import dayjs from 'dayjs'
 import { FirestoreInsertData } from '../@types/models'
 
 const initializeFirestore = () => {
-  const serviceAccount = process.env.GCP_SA_KEY
+  const serviceAccount = admin.credential.applicationDefault()
 
   if (isNil(serviceAccount)) {
     throw Error('Does not received service account')
   }
 
-  const parsedServiceAccount = JSON.parse(Buffer.from(serviceAccount, 'base64').toString())
-
   admin.initializeApp({
-    credential: admin.credential.cert(parsedServiceAccount),
+    credential: serviceAccount,
   })
 
   return admin.firestore()
