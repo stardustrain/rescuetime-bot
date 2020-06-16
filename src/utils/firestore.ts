@@ -1,6 +1,6 @@
 import admin from 'firebase-admin'
 import { isNil } from 'ramda'
-import dayjs from 'dayjs'
+import { getToday } from '../utils/misc'
 
 import { FirestoreInsertData } from '../@types/models'
 
@@ -23,7 +23,7 @@ const initializeFirestore = () => {
 export const setDailyData = async (data: FirestoreInsertData) => {
   try {
     const db = initializeFirestore()
-    const formattedDate = dayjs(data.date).utc().format()
+    const formattedDate = getToday().subtract(1, 'day').format()
 
     const docRef = db.collection('rescuetime').doc(formattedDate)
     const insertData = {
