@@ -3,11 +3,11 @@ import { indexBy, prop } from 'ramda'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 
+import { ParsedEfficiency } from './parseUtils'
+
 dayjs.extend(utc)
 
-import { Parsedefficiency } from '../rescuetime/weeklyReportUtils'
-
-export const getSpentTime = (ce?: Parsedefficiency) => ce?.timeSpent ?? 0
+export const getSpentTime = (ce?: ParsedEfficiency) => ce?.timeSpent ?? 0
 
 export const getWeekRange = () => {
   const currentDate = getToday()
@@ -20,8 +20,8 @@ export const getWeekRange = () => {
   }
 }
 
-export const mergeTimeByCategory = (efficiencies: Parsedefficiency[]) => {
-  const ce = camelizeKeys(indexBy(prop('efficiency'), efficiencies)) as {[key: string]: Parsedefficiency}
+export const mergeTimeByCategory = (efficiencies: ParsedEfficiency[]) => {
+  const ce = camelizeKeys(indexBy(prop('efficiency'), efficiencies)) as { [key: string]: ParsedEfficiency }
 
   return {
     productiveTime: getSpentTime(ce.productiveTime) + getSpentTime(ce.veryProductiveTime),

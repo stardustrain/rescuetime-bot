@@ -1,6 +1,6 @@
 import { requestAll } from '../utils/api'
 import { getDayilDataSummary, compareWithYesterday } from './dailyReportUtils'
-import { parseOverview, parseActivity, parseEfficiency } from './weeklyReportUtils'
+import { parseOverview, parseActivity, parseEfficiency } from '../utils/parseUtils'
 import { dailyDataRequestUrls, weeklyDataRequestUrls } from '../utils/urls'
 
 export const getDailyData = async () => {
@@ -36,6 +36,11 @@ export const getDailyData = async () => {
     summary: todaySummary,
     compareYesterday: compareWithYesterday([todaySummary, yesterdaySummary]),
     date: today,
+    raw: {
+      efficiency: todayEfficiency,
+      overview: todayOverview,
+      activity,
+    },
   }
 }
 

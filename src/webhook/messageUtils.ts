@@ -4,7 +4,7 @@ import { scaleLinear } from 'd3-scale'
 
 import { parseTime } from '../utils/parseUtils'
 import { mergeTimeByCategory } from '../utils/misc'
-import { ParsedOverview, ParsedActivity, Parsedefficiency } from '../rescuetime/weeklyReportUtils'
+import { ParsedOverview, ParsedActivity, ParsedEfficiency } from '../utils/parseUtils'
 
 // 4 hour spent productive activity on 6 days, last 2 is value of weightedProductivty.
 const OBJECTIVE_PRODUCTIVITY_DAILY_SCORE = 5 * 3600 * 2
@@ -37,19 +37,20 @@ export const getScoreImogi = cond<number, string>([
   [T, always('')],
 ])
 
-export const getChartImogi = (compareTime: number) => (
+export const getChartImogi = (compareTime: number) =>
   compareTime > 0 ? ':chart_with_upwards_trend:' : ':chart_with_downwards_trend:'
-)
 
-export const format = (time: { hour: number, mins: number, isDecrease: boolean } | string) => {
-  if (typeof time === 'string') { return time }
+export const format = (time: { hour: number; mins: number; isDecrease: boolean } | string) => {
+  if (typeof time === 'string') {
+    return time
+  }
 
-  const formattedMessage = (cond<{ hour: number, mins: number, isDecrease: boolean }, string>([
+  const formattedMessage = cond<{ hour: number; mins: number; isDecrease: boolean }, string>([
     [(x) => all(equals(0))(values(pick(['hour', 'mins'], x))), always('')],
     [(x) => equals(0, x.hour), always(`${time.mins}분`)],
     [(x) => equals(0, x.mins), always(`${time.hour}시간`)],
     [T, always(`${time.hour}시간 ${time.mins}분`)],
-  ]))(time)
+  ])(time)
 
   return `${time.isDecrease ? '-' : ''}${formattedMessage}`
 }
@@ -57,12 +58,13 @@ export const format = (time: { hour: number, mins: number, isDecrease: boolean }
 export const getScaledActivityScore = ({
   activities,
   isDayily = false,
-}: { activities: ParsedActivity[], isDayily?: boolean}) => {
+}: {
+  activities: ParsedActivity[]
+  isDayily?: boolean
+}) => {
   const objectiveScore = isDayily ? OBJECTIVE_PRODUCTIVITY_DAILY_SCORE : OBJECTIVE_PRODUCTIVITY_SCORE
-  const totalScore = reduce((acc, v) => acc + (v.timeSpent * v.weightedProductivty), 0, activities)
-  const scale = scaleLinear()
-    .domain([0, objectiveScore])
-    .range([0, 100])
+  const totalScore = reduce((acc, v) => acc + v.timeSpent * v.weightedProductivty, 0, activities)
+  const scale = scaleLinear().domain([0, objectiveScore]).range([0, 100])
 
   return Math.floor(scale(totalScore))
 }
@@ -71,7 +73,6 @@ export const getScaledActivityScore = ({
 export const getTotalTimeSpent = (time: number) => format(parseTime(time / (60 * 60)))
 // NOTE: Check 6 days data.
 export const getAvgTimeSpent = (time: number) => format(parseTime(time / (60 * 60 * 6)))
-
 
 export const generateWeeklyOverviewData = (overviews?: ParsedOverview[]) => {
   if (isNil(overviews) || isEmpty(overviews)) {
@@ -105,27 +106,31 @@ export const generateWeeklyActivityData = (activities?: ParsedActivity[]) => {
   }
 }
 
-export const generateWeeklyefficiencyData = (efficiencies?: Parsedefficiency[]) => {
+export const generateWeeklyefficiencyData = (efficiencies?: ParsedEfficiency[]) => {
   if (isNil(efficiencies) || isEmpty(efficiencies)) {
     throw Error('Efficiency generate failed.')
   }
 
   const { productiveTime, distractingTime, neutralTime } = mergeTimeByCategory(efficiencies)
 
-  return [{
-    timeSpent: productiveTime,
-    totalTimeSpent: getTotalTimeSpent(productiveTime),
-    avgTimeSpent: getAvgTimeSpent(productiveTime),
-    efficiency: 'Productive Time',
-  }, {
-    timeSpent: distractingTime,
-    totalTimeSpent: getTotalTimeSpent(distractingTime),
-    avgTimeSpent: getAvgTimeSpent(distractingTime),
-    efficiency: 'Distracting Time',
-  }, {
-    timeSpent: neutralTime,
-    totalTimeSpent: getTotalTimeSpent(neutralTime),
-    avgTimeSpent: getAvgTimeSpent(neutralTime),
-    efficiency: 'Neutral Time',
-  }]
+  return [
+    {
+      timeSpent: productiveTime,
+      totalTimeSpent: getTotalTimeSpent(productiveTime),
+      avgTimeSpent: getAvgTimeSpent(productiveTime),
+      efficiency: 'Productive Time',
+    },
+    {
+      timeSpent: distractingTime,
+      totalTimeSpent: getTotalTimeSpent(distractingTime),
+      avgTimeSpent: getAvgTimeSpent(distractingTime),
+      efficiency: 'Distracting Time',
+    },
+    {
+      timeSpent: neutralTime,
+      totalTimeSpent: getTotalTimeSpent(neutralTime),
+      avgTimeSpent: getAvgTimeSpent(neutralTime),
+      efficiency: 'Neutral Time',
+    },
+  ]
 }

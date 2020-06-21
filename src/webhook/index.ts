@@ -23,8 +23,8 @@ export const sendDailyWebHook = async () => {
       })
 
       return {
-        date: currentDate,
         data: null,
+        raw: null,
       }
     }
 
@@ -53,8 +53,8 @@ export const sendDailyWebHook = async () => {
     )
 
     return {
-      date: currentDate,
       data: dailyData.summary,
+      raw: dailyData.raw,
     }
   } catch (e) {
     console.error(e)
