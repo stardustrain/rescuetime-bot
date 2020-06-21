@@ -88,12 +88,14 @@ describe('messageUtils.ts', () => {
 
   describe('generateWeeklyOverviewData(overviews?: ParsedOverview)', () => {
     test('should return generated data when recieved valid data.', () => {
-      expect(generateWeeklyOverviewData([
-        { rank: 1, timeSpent: 46687, category: 'Software Development' },
-        { rank: 2, timeSpent: 14531, category: 'Communication & Scheduling' },
-        { rank: 3, timeSpent: 3953, category: 'Business' },
-        { rank: 4, timeSpent: 3331, category: 'Reference & Learning' },
-        { rank: 5, timeSpent: 2940, category: 'Utilities' } ]),
+      expect(
+        generateWeeklyOverviewData([
+          { rank: 1, timeSpent: 46687, category: 'Software Development' },
+          { rank: 2, timeSpent: 14531, category: 'Communication & Scheduling' },
+          { rank: 3, timeSpent: 3953, category: 'Business' },
+          { rank: 4, timeSpent: 3331, category: 'Reference & Learning' },
+          { rank: 5, timeSpent: 2940, category: 'Utilities' },
+        ]),
       ).toEqual([
         { rank: 1, totalTimeSpent: '12시간 58분', avgTimeSpent: '2시간 9분', category: 'Software Development' },
         { rank: 2, totalTimeSpent: '4시간 2분', avgTimeSpent: '40분', category: 'Communication & Scheduling' },
@@ -112,130 +114,162 @@ describe('messageUtils.ts', () => {
 
   describe('getScaledActivityScore(activityScores: ParsedActivity[])', () => {
     test('should return scaled score.', () => {
-      expect(getScaledActivityScore({
-        activities:[{
-          rank: 1,
-          timeSpent: 28930,
-          activity: 'Visual Studio Code',
-          category: 'Editing & IDEs',
-          weightedProductivty: 2,
-        }, {
-          rank: 2,
-          timeSpent: 10946,
-          activity: 'Slack',
-          category: 'Instant Message',
-          weightedProductivty: -1,
-        }, {
-          rank: 3,
-          timeSpent: 5580,
-          activity: 'github.com',
-          category: 'General Software Development',
-          weightedProductivty: 2,
-        }, {
-          rank: 4,
-          timeSpent: 3541,
-          activity: 'Terminal',
-          category: 'Systems Operations',
-          weightedProductivty: 2,
-        }, {
-          rank: 5,
-          timeSpent: 2987,
-          activity: 'localhost:3000',
-          category: 'General Software Development',
-          weightedProductivty: 2,
-        }],
-      })).toEqual(32)
+      expect(
+        getScaledActivityScore({
+          activities: [
+            {
+              rank: 1,
+              timeSpent: 28930,
+              activity: 'Visual Studio Code',
+              category: 'Editing & IDEs',
+              weightedProductivty: 2,
+            },
+            {
+              rank: 2,
+              timeSpent: 10946,
+              activity: 'Slack',
+              category: 'Instant Message',
+              weightedProductivty: -1,
+            },
+            {
+              rank: 3,
+              timeSpent: 5580,
+              activity: 'github.com',
+              category: 'General Software Development',
+              weightedProductivty: 2,
+            },
+            {
+              rank: 4,
+              timeSpent: 3541,
+              activity: 'Terminal',
+              category: 'Systems Operations',
+              weightedProductivty: 2,
+            },
+            {
+              rank: 5,
+              timeSpent: 2987,
+              activity: 'localhost:3000',
+              category: 'General Software Development',
+              weightedProductivty: 2,
+            },
+          ],
+        }),
+      ).toEqual(32)
 
-      expect(getScaledActivityScore({
-        activities: [{
-          rank: 1,
-          timeSpent: 4 * 6 * 3600,
-          activity: 'Visual Studio Code',
-          category: 'Editing & IDEs',
-          weightedProductivty: 2,
-        }],
-      })).toEqual(80)
+      expect(
+        getScaledActivityScore({
+          activities: [
+            {
+              rank: 1,
+              timeSpent: 4 * 6 * 3600,
+              activity: 'Visual Studio Code',
+              category: 'Editing & IDEs',
+              weightedProductivty: 2,
+            },
+          ],
+        }),
+      ).toEqual(80)
 
-      expect(getScaledActivityScore({
-        activities: [{
-          rank: 1,
-          timeSpent: 5 * 6 * 3600,
-          activity: 'Visual Studio Code',
-          category: 'Editing & IDEs',
-          weightedProductivty: 2,
-        }],
-      })).toEqual(100)
+      expect(
+        getScaledActivityScore({
+          activities: [
+            {
+              rank: 1,
+              timeSpent: 5 * 6 * 3600,
+              activity: 'Visual Studio Code',
+              category: 'Editing & IDEs',
+              weightedProductivty: 2,
+            },
+          ],
+        }),
+      ).toEqual(100)
 
-      expect(getScaledActivityScore({
-        activities: [{
-          rank: 1,
-          timeSpent: 4821,
-          activity: 'Visual Studio Code',
-          category: 'Editing & IDEs',
-          weightedProductivty: 2,
-        }, {
-          rank: 2,
-          timeSpent: 1824,
-          activity: 'Slack',
-          category: 'Instant Message',
-          weightedProductivty: -1,
-        }, {
-          rank: 3,
-          timeSpent: 930,
-          activity: 'github.com',
-          category: 'General Software Development',
-          weightedProductivty: 2,
-        }, {
-          rank: 4,
-          timeSpent: 708,
-          activity: 'Terminal',
-          category: 'Systems Operations',
-          weightedProductivty: 2,
-        }, {
-          rank: 5,
-          timeSpent: 497,
-          activity: 'localhost:3000',
-          category: 'General Software Development',
-          weightedProductivty: 2,
-        }],
-        isDayily: true,
-      })).toEqual(33)
+      expect(
+        getScaledActivityScore({
+          activities: [
+            {
+              rank: 1,
+              timeSpent: 4821,
+              activity: 'Visual Studio Code',
+              category: 'Editing & IDEs',
+              weightedProductivty: 2,
+            },
+            {
+              rank: 2,
+              timeSpent: 1824,
+              activity: 'Slack',
+              category: 'Instant Message',
+              weightedProductivty: -1,
+            },
+            {
+              rank: 3,
+              timeSpent: 930,
+              activity: 'github.com',
+              category: 'General Software Development',
+              weightedProductivty: 2,
+            },
+            {
+              rank: 4,
+              timeSpent: 708,
+              activity: 'Terminal',
+              category: 'Systems Operations',
+              weightedProductivty: 2,
+            },
+            {
+              rank: 5,
+              timeSpent: 497,
+              activity: 'localhost:3000',
+              category: 'General Software Development',
+              weightedProductivty: 2,
+            },
+          ],
+          isDayily: true,
+        }),
+      ).toEqual(33)
     })
   })
 
   describe('generateWeeklyActivityData(activities?: ParsedActivity[])', () => {
     test('should return generated data when recieved valid data.', () => {
-      expect(generateWeeklyActivityData([{
-        rank: 1,
-        timeSpent: 28930,
-        activity: 'Visual Studio Code',
-        category: 'Editing & IDEs',
-        weightedProductivty: 2,
-      }, {
-        rank: 2,
-        timeSpent: 10946,
-        activity: 'Slack',
-        category: 'Instant Message',
-        weightedProductivty: -1,
-      }, {
-        rank: 3,
-        timeSpent: 5580,
-        activity: 'github.com',
-        category: 'General Software Development',
-        weightedProductivty: 2,
-      }, {
-        rank: 4,
-        timeSpent: 3541,
-        activity: 'Terminal',
-        category: 'Systems Operations',
-        weightedProductivty: 2,
-      }, {
-        rank: 5,
-        timeSpent: 2987,
-        activity: 'localhost:3000',
-        category: 'General Software Development',
-        weightedProductivty: 2,
-      }])).toEqual({
+      expect(
+        generateWeeklyActivityData([
+          {
+            rank: 1,
+            timeSpent: 28930,
+            activity: 'Visual Studio Code',
+            category: 'Editing & IDEs',
+            weightedProductivty: 2,
+          },
+          {
+            rank: 2,
+            timeSpent: 10946,
+            activity: 'Slack',
+            category: 'Instant Message',
+            weightedProductivty: -1,
+          },
+          {
+            rank: 3,
+            timeSpent: 5580,
+            activity: 'github.com',
+            category: 'General Software Development',
+            weightedProductivty: 2,
+          },
+          {
+            rank: 4,
+            timeSpent: 3541,
+            activity: 'Terminal',
+            category: 'Systems Operations',
+            weightedProductivty: 2,
+          },
+          {
+            rank: 5,
+            timeSpent: 2987,
+            activity: 'localhost:3000',
+            category: 'General Software Development',
+            weightedProductivty: 2,
+          },
+        ]),
+      ).toEqual({
         score: 32,
         rows: [
           { rank: 1, totalTimeSpent: '8시간 2분', avgTimeSpent: '1시간 20분', activity: 'Visual Studio Code' },
@@ -254,15 +288,17 @@ describe('messageUtils.ts', () => {
     })
   })
 
-  describe('generateWeeklyefficiencyData(efficiencies?: Parsedefficiency[])', () => {
+  describe('generateWeeklyefficiencyData(efficiencies?: ParsedEfficiency[])', () => {
     test('should return generated data when received valid data.', () => {
-      expect(generateWeeklyefficiencyData([
-        { rank: 1, timeSpent: 53080, efficiency: 'Very Productive Time' },
-        { rank: 2, timeSpent: 10990, efficiency: 'Distracting Time' },
-        { rank: 3, timeSpent: 10106, efficiency: 'Neutral Time' },
-        { rank: 4, timeSpent: 1967, efficiency: 'Productive Time' },
-        { rank: 5, timeSpent: 1283, efficiency: 'Very Distracting Time' },
-      ])).toEqual([
+      expect(
+        generateWeeklyefficiencyData([
+          { rank: 1, timeSpent: 53080, efficiency: 'Very Productive Time' },
+          { rank: 2, timeSpent: 10990, efficiency: 'Distracting Time' },
+          { rank: 3, timeSpent: 10106, efficiency: 'Neutral Time' },
+          { rank: 4, timeSpent: 1967, efficiency: 'Productive Time' },
+          { rank: 5, timeSpent: 1283, efficiency: 'Very Distracting Time' },
+        ]),
+      ).toEqual([
         { timeSpent: 55047, totalTimeSpent: '15시간 17분', avgTimeSpent: '2시간 32분', efficiency: 'Productive Time' },
         { timeSpent: 12273, totalTimeSpent: '3시간 24분', avgTimeSpent: '34분', efficiency: 'Distracting Time' },
         { timeSpent: 10106, totalTimeSpent: '2시간 48분', avgTimeSpent: '28분', efficiency: 'Neutral Time' },
