@@ -1,4 +1,4 @@
-import { ParsedActivity, ParsedOverview, Parsedefficiency } from '../rescuetime/weeklyReportUtils'
+import { ParsedActivity, ParsedOverview, ParsedEfficiency } from '../utils/parseUtils'
 
 export interface Overview {
   rowHeaders: ['Rank', 'Time Spent (seconds)', 'Number of People', 'Category']
@@ -18,7 +18,7 @@ export interface Efficiency {
 export interface WeeklyDataModel {
   overview: ParsedOverview[]
   activity: ParsedActivity[]
-  efficiency: Parsedefficiency[]
+  efficiency: ParsedEfficiency[]
 }
 
 export type WeeklyData = WeeklyDataModel & {
@@ -37,7 +37,32 @@ interface DailySummary {
   score: number
 }
 
+export type DailyDataSummaryParams = {
+  efficiency: Efficiency
+  overview: Overview
+  activity: Activity
+}
+
 export interface FirestoreInsertData {
-  date: string
   data: DailySummary | null
+  raw: DailyDataSummaryParams | null
+}
+
+interface Summary {
+  totalTime: number
+  productiveTime: number
+  distractingTime: number
+  programDevlopmentTime: number
+  productiveTimePercentage: number
+  distractingTimePercentage: number
+  programDevlopmentTimePercentage: number
+  score: number
+}
+
+interface FirestoreData {
+  summary: Summary
+  efficiency: ParsedEfficiency[]
+  overview: ParsedOverview[]
+  activity: ParsedActivity[]
+  date: string
 }
