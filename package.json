@@ -23,7 +23,7 @@
   "dependencies": {
     "@slack/webhook": "^5.0.2",
     "axios": "^0.21.2",
-    "d3-scale": "^3.2.1",
+    "d3-scale": "^4.0.2",
     "dayjs": "^1.8.18",
     "firebase-admin": "^8.12.1",
     "humps": "^2.0.1",
